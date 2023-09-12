@@ -4,9 +4,7 @@
 --------------------------------------------------------------------------------
 """
 
-from src.ConductanceModels.cumulative_Weibull_distribution_model import CumulativeWeibullDistribution
-
-from numpy import zeros, amax, linspace
+from src.cumulative_Weibull_distribution_model import CumulativeWeibullDistribution
 
 
 class HydraulicCostModel:
