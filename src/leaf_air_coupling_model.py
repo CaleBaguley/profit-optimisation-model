@@ -4,7 +4,7 @@
 -------------------------------------------------------------------------
 """
 
-from src.saturated_vapour_pressure_model import SaturatedVapourPressureModel
+from src.conversions import convert_stomatal_conductance_of_water_to_carbon
 
 
 class LeafAirCouplingModel:
@@ -34,3 +34,26 @@ class LeafAirCouplingModel:
         """
 
         return transpiration * air_pressure / vapour_pressure_deficit_of_the_air
+
+    def stomatal_conductance_to_carbon(self,
+                                       transpiration,
+                                       air_temperature,
+                                       vapour_pressure_deficit_of_the_air,
+                                       air_pressure):
+
+        """
+        Calculates stomatal conductance to carbon assuming perfect leaf atmosphere coupling and that the temperature of
+        the is equal to that of the air.
+        :param transpiration: (mmol m-2 s-1)
+        :param air_temperature: (k)
+        :param vapour_pressure_deficit_of_the_air: (kPa)
+        :param air_pressure: (kPa)
+        :return: stomatal conductance to water (mmol m-2 s-1)
+        """
+
+        stomatal_conductance_to_water = self.stomatal_conductance_to_water(transpiration,
+                                                                           air_temperature,
+                                                                           vapour_pressure_deficit_of_the_air,
+                                                                           air_pressure)
+
+        return convert_stomatal_conductance_of_water_to_carbon(stomatal_conductance_to_water)
