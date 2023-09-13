@@ -5,7 +5,7 @@
 """
 
 
-class VapourPressureModel:
+class SaturatedVapourPressureModel:
 
     _polynomial_constants: list
 
