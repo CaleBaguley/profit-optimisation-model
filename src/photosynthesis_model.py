@@ -10,30 +10,29 @@ from src.TemperatureDependenceModels.Q10_temperature_dependence_model import Q10
 
 from numpy import roots, max, min
 
+
 class PhotosynthesisModel:
 
     def __init__(self,
-                 rubisco_rates_model = RubiscoRates(),
-                 CO2_compensation_point_model = ArrheniusModel(42.75, 37830.0),
-                 mitochondrial_respiration_rate_model = Q10TemperatureDependenceModel(0.2, 2.)):
-
+                 rubisco_rates_model=RubiscoRates(),
+                 CO2_compensation_point_model=ArrheniusModel(42.75, 37830.0),
+                 mitochondrial_respiration_rate_model=Q10TemperatureDependenceModel(0.2, 2.)):
         self._rubisco_rates_model = rubisco_rates_model
         self._CO2_compensation_point_model = CO2_compensation_point_model
         self._mitochondrial_respiration_rate_model = mitochondrial_respiration_rate_model
 
-    def intercellular_CO2(self,
-                          stomatal_conductance_to_CO2,
-                          atmospheric_CO2_concentration,
-                          leaf_temperature,
-                          intercellular_O):
-
+    def intercellular_CO2_concentration(self,
+                                        stomatal_conductance_to_CO2,
+                                        atmospheric_CO2_concentration,
+                                        leaf_temperature,
+                                        intercellular_O):
         """
 
         @param stomatal_conductance_to_CO2: mol m-2 s-1
         @param atmospheric_CO2_concentration: umol mol-1
         @param leaf_temperature: K
         @param intercellular_O: umol mol-1
-        @return:
+        @return: intercellular CO2 concentration (umol mol-1)
         """
 
         mitochondrial_respiration_rate = (
@@ -62,4 +61,25 @@ class PhotosynthesisModel:
         intercellular_CO2_concentratin = roots([A, B, C])
 
         return max(intercellular_CO2_concentratin)
+
+    def net_rate_of_CO2_assimilation(self,
+                                     stomatal_conductance_to_CO2,
+                                     atmospheric_CO2_concentration,
+                                     leaf_temperature,
+                                     intercellular_O):
+        """
+
+        @param stomatal_conductance_to_CO2: mol m-2 s-1
+        @param atmospheric_CO2_concentration: umol mol-1
+        @param leaf_temperature: K
+        @param intercellular_O: umol mol-1
+        @return: net rate of CO2 assimilation umol m-2 s-1
+        """
+
+        intercellular_CO2_concentration = self.intercellular_CO2_concentration(stomatal_conductance_to_CO2,
+                                                                               atmospheric_CO2_concentration,
+                                                                               leaf_temperature,
+                                                                               intercellular_O)
+
+        return (atmospheric_CO2_concentration - intercellular_CO2_concentration) * stomatal_conductance_to_CO2
 
