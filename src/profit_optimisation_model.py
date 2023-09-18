@@ -20,7 +20,6 @@ class ProfitOptimisationModel:
                  hydraulic_cost_model,
                  leaf_air_coupling_model,
                  CO2_gain_model):
-
         self._hydraulic_cost_model = hydraulic_cost_model
         self._leaf_air_coupling_model = leaf_air_coupling_model
         self._CO2_gain_model = CO2_gain_model
@@ -33,6 +32,24 @@ class ProfitOptimisationModel:
                                                      air_pressure,
                                                      atmospheric_CO2_concentration,
                                                      intercellular_oxygen):
+
+        """
+
+        @param leaf_water_potentials: MPa
+        @param soil_water_potential: MPa
+        @param air_temperature: K
+        @param air_vapour_pressure_deficit: kPa
+        @param air_pressure: kPa
+        @param atmospheric_CO2_concentration: umol mol-1
+        @param intercellular_oxygen: umol mol-1
+
+        @return: profit
+        @return: normalised CO2 gain
+        @return: hydraulic cost
+        @return: maximum CO2 uptake: umol m-2 s-1
+        @return: transpiration: mmol m-2 s-1
+        """
+
         hydraulic_costs = \
             self._hydraulic_cost_model.hydraulic_cost_as_a_function_of_leaf_water_potential(leaf_water_potentials,
                                                                                             soil_water_potential)
@@ -44,11 +61,38 @@ class ProfitOptimisationModel:
                 self._hydraulic_cost_model.transpiration(leaf_water_potentials[i],
                                                          soil_water_potential)
 
-        CO2_gain = self._CO2_gain_model.CO2_gain(transpiration_as_a_function_of_leaf_water_potential,
-                                                 air_temperature,
-                                                 air_vapour_pressure_deficit,
-                                                 air_pressure,
-                                                 atmospheric_CO2_concentration,
-                                                 intercellular_oxygen)
+        CO2_gain, maximum_CO2_uptake = \
+            self._CO2_gain_model.CO2_gain(transpiration_as_a_function_of_leaf_water_potential,
+                                          air_temperature,
+                                          air_vapour_pressure_deficit,
+                                          air_pressure,
+                                          atmospheric_CO2_concentration,
+                                          intercellular_oxygen)
 
-        return CO2_gain - hydraulic_costs, CO2_gain, hydraulic_costs
+        return (CO2_gain - hydraulic_costs,
+                CO2_gain,
+                hydraulic_costs,
+                maximum_CO2_uptake,
+                transpiration_as_a_function_of_leaf_water_potential)
+
+    def optimal_state(self,
+                      leaf_water_potentials,
+                      soil_water_potential,
+                      air_temperature,
+                      air_vapour_pressure_deficit,
+                      air_pressure,
+                      atmospheric_CO2_concentration,
+                      intercellular_oxygen):
+        """
+        Uses profit optimisation to calculate the optimal leaf water potential.
+        @param leaf_water_potentials:
+        @param soil_water_potential:
+        @param air_temperature:
+        @param air_vapour_pressure_deficit:
+        @param air_pressure:
+        @param atmospheric_CO2_concentration:
+        @param intercellular_oxygen:
+        @return: optimal leaf water potential(MPa)
+        @return: net CO2 uptake: umol m-2 s-1
+        @return: transpiration: mmol m-2 s-1
+        """
