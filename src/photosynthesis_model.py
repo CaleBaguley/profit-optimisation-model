@@ -9,6 +9,7 @@ from src.TemperatureDependenceModels.arrhenius_and_peaked_arrhenius_function imp
 from src.TemperatureDependenceModels.Q10_temperature_dependence_model import Q10TemperatureDependenceModel
 
 from numpy import roots, max, min
+from numpy.polynomial.polynomial import Polynomial
 
 
 class PhotosynthesisModel:
@@ -58,9 +59,9 @@ class PhotosynthesisModel:
              + CO2_compensation_point * maximum_carboxylation_rate)
 
         # Find the roots of the quadratic equation
-        intercellular_CO2_concentratin = roots([A, B, C])
+        intercellular_CO2_concentration = roots([A, B, C])
 
-        return max(intercellular_CO2_concentratin)
+        return max(intercellular_CO2_concentration)
 
     def net_rate_of_CO2_assimilation(self,
                                      stomatal_conductance_to_CO2,
