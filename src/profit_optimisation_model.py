@@ -8,7 +8,8 @@ from src.hydraulic_cost_model import HydraulicCostModel
 from src.leaf_air_coupling_model import LeafAirCouplingModel
 from src.CO2_gain_model import CO2GainModel
 
-from numpy import zeros
+from numpy import zeros, linspace
+from numpy import argmax
 
 
 class ProfitOptimisationModel:
@@ -32,7 +33,6 @@ class ProfitOptimisationModel:
                                                      air_pressure,
                                                      atmospheric_CO2_concentration,
                                                      intercellular_oxygen):
-
         """
 
         @param leaf_water_potentials: MPa
@@ -76,23 +76,48 @@ class ProfitOptimisationModel:
                 transpiration_as_a_function_of_leaf_water_potential)
 
     def optimal_state(self,
-                      leaf_water_potentials,
                       soil_water_potential,
                       air_temperature,
                       air_vapour_pressure_deficit,
                       air_pressure,
                       atmospheric_CO2_concentration,
-                      intercellular_oxygen):
+                      intercellular_oxygen,
+                      number_of_sample_points = 1000):
         """
         Uses profit optimisation to calculate the optimal leaf water potential.
-        @param leaf_water_potentials:
-        @param soil_water_potential:
-        @param air_temperature:
-        @param air_vapour_pressure_deficit:
-        @param air_pressure:
-        @param atmospheric_CO2_concentration:
-        @param intercellular_oxygen:
+        @param soil_water_potential: MPa
+        @param air_temperature: K
+        @param air_vapour_pressure_deficit: kPa
+        @param air_pressure: kPa
+        @param atmospheric_CO2_concentration: umol mol-1
+        @param intercellular_oxygen: umol mol-1
+        @param number_of_sample_points: Number of leaf water potentials to test
+
         @return: optimal leaf water potential(MPa)
         @return: net CO2 uptake: umol m-2 s-1
         @return: transpiration: mmol m-2 s-1
         """
+
+        critical_leaf_water_potential = self._hydraulic_cost_model.critical_hydraulic_conductance
+
+        leaf_water_potentials = linspace(soil_water_potential,
+                                         critical_leaf_water_potential,
+                                         num = number_of_sample_points)
+
+        (profit, CO2_gain, hydraulic_costs, maximum_net_CO2_uptake,
+         transpiration_as_a_function_of_leaf_water_potential) = \
+            self.profit_as_a_function_of_leaf_water_potential(leaf_water_potentials,
+                                                              soil_water_potential,
+                                                              air_temperature,
+                                                              air_vapour_pressure_deficit,
+                                                              air_pressure,
+                                                              atmospheric_CO2_concentration,
+                                                              intercellular_oxygen)
+
+        maximum_profit_id = argmax(profit)
+
+        optimal_leaf_water_potential = leaf_water_potentials[maximum_profit_id]
+        net_CO2_uptake = maximum_net_CO2_uptake * CO2_gain[maximum_profit_id]
+        transpiration_rate = transpiration_as_a_function_of_leaf_water_potential[maximum_profit_id]
+
+        return optimal_leaf_water_potential, net_CO2_uptake, transpiration_rate
