@@ -36,7 +36,8 @@ class CO2GainModel:
         @param air_pressure: kPa
         @param atmospheric_CO2_concentration: umol mol-1
         @param intercellular_O: umol mol-1
-        @return:
+        @return: normalised CO2 gain
+        @return: maximum CO2 gain: Umol m-2 s-1
         """
 
         net_CO2_uptake = zeros(len(transpiration_rates))
@@ -59,4 +60,4 @@ class CO2GainModel:
 
         maximum_CO2_uptake = max(net_CO2_uptake)
 
-        return net_CO2_uptake / maximum_CO2_uptake
+        return net_CO2_uptake / maximum_CO2_uptake, maximum_CO2_uptake
