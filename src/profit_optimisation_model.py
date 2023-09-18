@@ -98,7 +98,7 @@ class ProfitOptimisationModel:
         @return: transpiration: mmol m-2 s-1
         """
 
-        critical_leaf_water_potential = self._hydraulic_cost_model.critical_hydraulic_conductance
+        critical_leaf_water_potential = self._hydraulic_cost_model.critical_leaf_water_potential
 
         leaf_water_potentials = linspace(soil_water_potential,
                                          critical_leaf_water_potential,
