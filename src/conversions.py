@@ -65,7 +65,7 @@ def magnitude_conversion(value, symbol_current_magnitude='', symbol_target_magni
     @return: converted value
     """
 
-    scale: float = symbol_magnitude_dict[symbol_target_magnitude] / symbol_magnitude_dict[symbol_current_magnitude]
+    scale: float = symbol_magnitude_dict[symbol_current_magnitude] / symbol_magnitude_dict[symbol_target_magnitude]
 
     return value * scale
 
