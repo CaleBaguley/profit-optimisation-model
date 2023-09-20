@@ -82,7 +82,7 @@ class ProfitOptimisationModel:
                       air_pressure,
                       atmospheric_CO2_concentration,
                       intercellular_oxygen,
-                      number_of_sample_points = 1000):
+                      number_of_sample_points=1000):
         """
         Uses profit optimisation to calculate the optimal leaf water potential.
         @param soil_water_potential: MPa
@@ -102,7 +102,7 @@ class ProfitOptimisationModel:
 
         leaf_water_potentials = linspace(soil_water_potential,
                                          critical_leaf_water_potential,
-                                         num = number_of_sample_points)
+                                         num=number_of_sample_points)
 
         (profit, CO2_gain, hydraulic_costs, maximum_net_CO2_uptake,
          transpiration_as_a_function_of_leaf_water_potential) = \
@@ -121,3 +121,44 @@ class ProfitOptimisationModel:
         transpiration_rate = transpiration_as_a_function_of_leaf_water_potential[maximum_profit_id]
 
         return optimal_leaf_water_potential, net_CO2_uptake, transpiration_rate
+
+
+def run_optimisation_model_on_data(profit_optimisation_model: ProfitOptimisationModel,
+                                   time_steps,
+                                   soil_water_potential_values,
+                                   air_temperature_values,
+                                   air_vapour_pressure_deficit_values,
+                                   air_pressure_values,
+                                   atmospheric_CO2_concentration_values,
+                                   intercellular_oxygen_values,
+                                   number_of_leaf_water_potential_sample_points=1000):
+    """
+
+    @param profit_optimisation_model:
+    @param time_steps:
+    @param soil_water_potential_values:
+    @param air_temperature_values:
+    @param air_vapour_pressure_deficit_values:
+    @param air_pressure_values:
+    @param atmospheric_CO2_concentration_values:
+    @param intercellular_oxygen_values:
+    @param number_of_leaf_water_potential_sample_points:
+    @return:
+    """
+
+    # Setup output arrays
+    optimal_leaf_water_potentials = zeros(len(time_steps))
+    net_CO2_uptake_values = zeros(len(time_steps))
+    transpiration_rate_values = zeros(len(time_steps))
+
+    for i in range(len(time_steps)):
+        optimal_leaf_water_potentials[i], net_CO2_uptake_values[i], transpiration_rate_values[i] = \
+            profit_optimisation_model.optimal_state(soil_water_potential_values[i],
+                                                    air_temperature_values[i],
+                                                    air_vapour_pressure_deficit_values[i],
+                                                    air_pressure_values[i],
+                                                    atmospheric_CO2_concentration_values[i],
+                                                    intercellular_oxygen_values[i],
+                                                    number_of_leaf_water_potential_sample_points)
+
+    return optimal_leaf_water_potentials, net_CO2_uptake_values, transpiration_rate_values
