@@ -12,7 +12,28 @@ from numpy import roots, max, min
 from numpy.polynomial.polynomial import Polynomial
 
 
-class PhotosynthesisModelRubiscoLimited:
+class PhotosynthesisModelDummy:
+
+    def intercellular_CO2_concentration(self,
+                                        stomatal_conductance_to_CO2,
+                                        atmospheric_CO2_concentration,
+                                        leaf_temperature,
+                                        intercellular_O):
+
+        raise Exception("intercellular_CO2_concentration method not implemented in PhotosynthesisModelDummy class")
+
+    def net_rate_of_CO2_assimilation(self,
+                                     stomatal_conductance_to_CO2,
+                                     atmospheric_CO2_concentration,
+                                     leaf_temperature,
+                                     intercellular_O):
+
+        raise Exception("net_rate_of_CO2_assimilation method not implemented in PhotosynthesisModelDummy class")
+
+
+
+
+class PhotosynthesisModelRubiscoLimited(PhotosynthesisModelDummy):
 
     def __init__(self,
                  rubisco_rates_model=RubiscoRates(),

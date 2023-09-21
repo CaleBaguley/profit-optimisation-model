@@ -6,12 +6,12 @@
 
 from numpy import zeros, max
 from src.leaf_air_coupling_model import LeafAirCouplingModel
-from src.photosynthesis_model import PhotosynthesisModelRubiscoLimited
+from src.photosynthesis_model import PhotosynthesisModelDummy
 
 
 class CO2GainModel:
     _leaf_air_coupling_model: LeafAirCouplingModel
-    _photosynthesis_model: PhotosynthesisModelRubiscoLimited
+    _photosynthesis_model: PhotosynthesisModelDummy
 
     def __init__(self,
                  leaf_air_coupling_model,
