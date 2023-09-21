@@ -8,15 +8,14 @@ from numpy import zeros, max
 from src.leaf_air_coupling_model import LeafAirCouplingModel
 from src.photosynthesis_model import PhotosynthesisModel
 
-class CO2GainModel:
 
+class CO2GainModel:
     _leaf_air_coupling_model: LeafAirCouplingModel
     _photosynthesis_model: PhotosynthesisModel
 
     def __init__(self,
                  leaf_air_coupling_model,
                  photosynthesis_model):
-
         self._leaf_air_coupling_model = leaf_air_coupling_model
         self._photosynthesis_model = photosynthesis_model
 
@@ -27,7 +26,6 @@ class CO2GainModel:
                  air_pressure,
                  atmospheric_CO2_concentration,
                  intercellular_O):
-
         """
 
         @param transpiration_rates: mmol m-2 s-1
@@ -53,10 +51,10 @@ class CO2GainModel:
             stomatal_conductance_to_CO2 /= 1000
 
             net_CO2_uptake[i] = \
-                self._photosynthesis_model.net_rate_of_CO2_assimilation(stomatal_conductance_to_CO2,
-                                                                        atmospheric_CO2_concentration,
-                                                                        air_temperature,
-                                                                        intercellular_O)
+                self._photosynthesis_model.net_rate_of_CO2_assimilation_rubisco_limited(stomatal_conductance_to_CO2,
+                                                                                        atmospheric_CO2_concentration,
+                                                                                        air_temperature,
+                                                                                        intercellular_O)
 
         maximum_CO2_uptake = max(net_CO2_uptake)
 
