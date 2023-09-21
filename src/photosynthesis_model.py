@@ -12,7 +12,7 @@ from numpy import roots, max, min
 from numpy.polynomial.polynomial import Polynomial
 
 
-class PhotosynthesisModel:
+class PhotosynthesisModelRubiscoLimited:
 
     def __init__(self,
                  rubisco_rates_model=RubiscoRates(),
