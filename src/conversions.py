@@ -6,21 +6,21 @@ from numpy import power
 
 # -- Conversion constants: --
 # grams per unit moles
-GRAMS_PER_MOLE_OF_WATER: float = 18.02
-GRAMS_PER_MOLE_OF_CARBON: float = 12.
+GRAMS_PER_MOLE_OF_WATER: float = 18.02 # g mol-1
+GRAMS_PER_MOLE_OF_CARBON: float = 12. # g mol-1
 
 # radiation conversions
 PHOTOSYNTHETICALLY_ACTIVE_RADIATION_PER_UNIT_SHORT_WAVE_RADIATION: float = 2.3
-JOULES_PER_MICRO_MOLE_OF_LIGHT: float = 4.57
+JOULES_PER_MICRO_MOLE_OF_LIGHT: float = 4.57 # J mmol-1
 
 # Seconds per unit time
-SECONDS_PER_HALF_HOUR: float = 1800.
-SECONDS_PER_HOUR: float = 3600.
-SECONDS_PER_DAY: float = 86400.
+SECONDS_PER_HALF_HOUR: float = 1800. # s
+SECONDS_PER_HOUR: float = 3600. # s
+SECONDS_PER_DAY: float = 86400. # s
 
 # Temperature conversions
-ZERO_DEGREES_CENTIGRADE_IN_KELVIN: float = 273.15
-TWENTY_FIVE_DEGREES_CENTIGRADE_IN_KELVIN: float = 298.15
+ZERO_DEGREES_CENTIGRADE_IN_KELVIN: float = 273.15 # K
+TWENTY_FIVE_DEGREES_CENTIGRADE_IN_KELVIN: float = 298.15 # K
 
 # Stomatal conductance ratios
 RATIO_OF_STOMATAL_CONDUCTANCE_OF_WATER_TO_CARBON: float = 1.57
@@ -30,6 +30,9 @@ RATIO_OF_LEAF_BOUNDARY_CONDUCTANCE_OF_CARBON_TO_HEAT: float = 1.32
 RATIO_OF_LEAF_BOUNDARY_CONDUCTANCE_OF_HEAT_TO_WATER: float = 1.075
 RATIO_OF_LEAF_BOUNDARY_CONDUCTANCE_OF_CARBON_TO_WATER: float = (RATIO_OF_LEAF_BOUNDARY_CONDUCTANCE_OF_CARBON_TO_HEAT
                                                                 * RATIO_OF_LEAF_BOUNDARY_CONDUCTANCE_OF_HEAT_TO_WATER)
+
+# Latent heat of water
+LATENT_HEAT_OF_VAPORISATION_OF_WATER: float = 44200 # J mol-1
 
 # Dict matching si unit prefixes to their scale. Used in magnitude_conversion().
 symbol_magnitude_dict = {'Y': power(10., 24),
@@ -207,6 +210,25 @@ def seconds_to_days(time_seconds):
     return time_seconds / SECONDS_PER_DAY
 
 
+def per_day_to_per_second(per_day):
+    """
+
+    @param per_day: d-1
+    @return: s-1
+    """
+
+    return per_day / SECONDS_PER_DAY
+
+
+def per_second_to_per_day(per_second):
+    """
+
+    @param per_second: s-1
+    @return: d-1
+    """
+
+    return per_second * SECONDS_PER_DAY
+
 # ---- Temperature conversions ----
 # kelvin and centigrade
 def degrees_centigrade_to_kelvin(temperature_centigrade):
@@ -323,3 +345,22 @@ def convert_stomatal_conductance_of_water_to_that_of_carbon(conductance_of_water
     @return: leaf boundary conductance of carbon
     """
     return conductance_of_water / RATIO_OF_STOMATAL_CONDUCTANCE_OF_WATER_TO_CARBON
+
+
+# ---- Transpiration and latent heat of water --
+def convert_transpiration_rate_to_latent_energy(transpiration_rate):
+    """
+
+    @param transpiration_rate: mol m-2 s-1
+    @return: J m-2 s-1 or W m-2
+    """
+    return transpiration_rate * LATENT_HEAT_OF_VAPORISATION_OF_WATER
+
+
+def convert_latent_energy_to_transpiration(latent_energy):
+    """
+
+    @param latent_energy: J m-2 s-1 or W m-2
+    @return: mol m-2 s-1
+    """
+    return latent_energy / LATENT_HEAT_OF_VAPORISATION_OF_WATER
