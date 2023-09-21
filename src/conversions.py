@@ -172,6 +172,23 @@ def seconds_to_half_hours(time_in_seconds):
     return time_in_seconds / SECONDS_PER_HALF_HOUR
 
 
+def per_second_to_per_half_hour(per_second):
+    """
+
+    @param per_second: s-1
+    @return: (0.5h)-1
+    """
+    return per_second * SECONDS_PER_HALF_HOUR
+
+
+def per_half_hour_to_per_second(per_half_hour):
+    """
+
+    @param per_half_hour: (0.5h)-1
+    @return: s-1
+    """
+    return per_half_hour / SECONDS_PER_HALF_HOUR
+
 # -- seconds and hours --
 def hours_to_seconds(time_in_hours):
     """
