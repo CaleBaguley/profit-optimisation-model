@@ -51,10 +51,10 @@ class CO2GainModel:
             stomatal_conductance_to_CO2 /= 1000
 
             net_CO2_uptake[i] = \
-                self._photosynthesis_model.net_rate_of_CO2_assimilation_rubisco_limited(stomatal_conductance_to_CO2,
-                                                                                        atmospheric_CO2_concentration,
-                                                                                        air_temperature,
-                                                                                        intercellular_O)
+                self._photosynthesis_model.net_rate_of_CO2_assimilation(stomatal_conductance_to_CO2,
+                                                                        atmospheric_CO2_concentration,
+                                                                        air_temperature,
+                                                                        intercellular_O)
 
         maximum_CO2_uptake = max(net_CO2_uptake)
 
