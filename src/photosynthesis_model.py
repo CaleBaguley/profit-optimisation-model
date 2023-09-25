@@ -10,8 +10,7 @@ from src.TemperatureDependenceModels.temperature_dependence_model import Tempera
 from src.TemperatureDependenceModels.arrhenius_and_peaked_arrhenius_function import ArrheniusModel
 from src.TemperatureDependenceModels.Q10_temperature_dependence_model import Q10TemperatureDependenceModel
 
-from numpy import roots, max, min
-from numpy.polynomial.polynomial import Polynomial
+from numpy import roots, max
 
 
 class PhotosynthesisModelDummy:
@@ -49,8 +48,6 @@ class PhotosynthesisModelDummy:
             utilized_photosynthetically_active_radiation)
 
         return (atmospheric_CO2_concentration - intercellular_CO2_concentration) * stomatal_conductance_to_CO2
-
-
 
 
 class PhotosynthesisModelRubiscoLimited(PhotosynthesisModelDummy):
@@ -120,10 +117,9 @@ class PhotosynthesisModelElectronTransportLimited(PhotosynthesisModelDummy):
 
     def __init__(self,
                  electron_transport_rate_model = ElectronTransportRateModel(),
-                 CO2_compensation_point_model=ArrheniusModel(42.75, 37830.0),
-                 mitochondrial_respiration_rate_model=Q10TemperatureDependenceModel(0.2, 2.)
+                 CO2_compensation_point_model = ArrheniusModel(42.75, 37830.0),
+                 mitochondrial_respiration_rate_model = Q10TemperatureDependenceModel(0.2, 2.)
                  ):
-
         """
 
         @param electron_transport_rate_model:
@@ -176,3 +172,39 @@ class PhotosynthesisModelElectronTransportLimited(PhotosynthesisModelDummy):
         intercellular_CO2_concentration = roots([A, B, C])
 
         return max(intercellular_CO2_concentration)
+
+
+class PhotosynthesisModel(PhotosynthesisModelDummy):
+    _photosynthesis_rubisco_limited_model: PhotosynthesisModelRubiscoLimited
+    _photosynthesis_electron_transport_limited_model: PhotosynthesisModelElectronTransportLimited
+
+    def __init__(self,
+                 photosynthesis_rubisco_limited_model=PhotosynthesisModelRubiscoLimited(),
+                 photosynthesis_electron_transport_limited_model=PhotosynthesisModelElectronTransportLimited()):
+        self._photosynthesis_rubisco_limited_model = photosynthesis_rubisco_limited_model
+        self._photosynthesis_electron_transport_limited_model = photosynthesis_electron_transport_limited_model
+
+    def intercellular_CO2_concentration(self,
+                                        stomatal_conductance_to_CO2,
+                                        atmospheric_CO2_concentration,
+                                        leaf_temperature,
+                                        intercellular_O=None,
+                                        utilized_photosynthetically_active_radiation=None):
+
+        intercellular_CO2_rubisco_limited = \
+            (self._photosynthesis_rubisco_limited_model
+             .intercellular_CO2_concentration(stomatal_conductance_to_CO2,
+                                              atmospheric_CO2_concentration,
+                                              leaf_temperature,
+                                              intercellular_O,
+                                              utilized_photosynthetically_active_radiation))
+
+        intercellular_CO2_electron_transport_limited = \
+            (self._photosynthesis_electron_transport_limited_model
+             .intercellular_CO2_concentration(stomatal_conductance_to_CO2,
+                                              atmospheric_CO2_concentration,
+                                              leaf_temperature,
+                                              intercellular_O,
+                                              utilized_photosynthetically_active_radiation))
+
+        return max([intercellular_CO2_rubisco_limited, intercellular_CO2_electron_transport_limited])
