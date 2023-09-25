@@ -25,7 +25,8 @@ class CO2GainModel:
                  air_vapour_pressure_deficit,
                  air_pressure,
                  atmospheric_CO2_concentration,
-                 intercellular_O):
+                 intercellular_O = None,
+                 photosyntheticaly_active_radiation = None):
         """
 
         @param transpiration_rates: mmol m-2 s-1
@@ -54,7 +55,8 @@ class CO2GainModel:
                 self._photosynthesis_model.net_rate_of_CO2_assimilation(stomatal_conductance_to_CO2,
                                                                         atmospheric_CO2_concentration,
                                                                         air_temperature,
-                                                                        intercellular_O)
+                                                                        intercellular_O,
+                                                                        photosyntheticaly_active_radiation)
 
         maximum_CO2_uptake = max(net_CO2_uptake)
 
