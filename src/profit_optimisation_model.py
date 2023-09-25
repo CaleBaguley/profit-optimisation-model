@@ -32,7 +32,8 @@ class ProfitOptimisationModel:
                                                      air_vapour_pressure_deficit,
                                                      air_pressure,
                                                      atmospheric_CO2_concentration,
-                                                     intercellular_oxygen):
+                                                     intercellular_oxygen,
+                                                     photosynthetically_active_radiation):
         """
 
         @param leaf_water_potentials: MPa
@@ -42,6 +43,7 @@ class ProfitOptimisationModel:
         @param air_pressure: kPa
         @param atmospheric_CO2_concentration: umol mol-1
         @param intercellular_oxygen: umol mol-1
+        @param photosynthetically_active_radiation: umol m-2 s-1
 
         @return: profit
         @return: normalised CO2 gain
@@ -67,7 +69,8 @@ class ProfitOptimisationModel:
                                           air_vapour_pressure_deficit,
                                           air_pressure,
                                           atmospheric_CO2_concentration,
-                                          intercellular_oxygen)
+                                          intercellular_oxygen,
+                                          photosynthetically_active_radiation)
 
         return (CO2_gain - hydraulic_costs,
                 CO2_gain,
@@ -82,6 +85,7 @@ class ProfitOptimisationModel:
                       air_pressure,
                       atmospheric_CO2_concentration,
                       intercellular_oxygen,
+                      photosynthetically_active_radiation,
                       number_of_sample_points=1000):
         """
         Uses profit optimisation to calculate the optimal leaf water potential.
@@ -91,6 +95,7 @@ class ProfitOptimisationModel:
         @param air_pressure: kPa
         @param atmospheric_CO2_concentration: umol mol-1
         @param intercellular_oxygen: umol mol-1
+        @param photosynthetically_active_radiation: umol m-2 s-1
         @param number_of_sample_points: Number of leaf water potentials to test
 
         @return: optimal leaf water potential(MPa)
@@ -112,7 +117,8 @@ class ProfitOptimisationModel:
                                                               air_vapour_pressure_deficit,
                                                               air_pressure,
                                                               atmospheric_CO2_concentration,
-                                                              intercellular_oxygen)
+                                                              intercellular_oxygen,
+                                                              photosynthetically_active_radiation)
 
         maximum_profit_id = argmax(profit)
 
@@ -131,6 +137,7 @@ def run_optimisation_model_on_data(profit_optimisation_model: ProfitOptimisation
                                    air_pressure_values,
                                    atmospheric_CO2_concentration_values,
                                    intercellular_oxygen_values,
+                                   photosynthetically_active_radiation_values,
                                    number_of_leaf_water_potential_sample_points=1000):
     """
 
@@ -142,6 +149,7 @@ def run_optimisation_model_on_data(profit_optimisation_model: ProfitOptimisation
     @param air_pressure_values:
     @param atmospheric_CO2_concentration_values:
     @param intercellular_oxygen_values:
+    @param photosynthetically_active_radiation_values:
     @param number_of_leaf_water_potential_sample_points:
     @return:
     """
@@ -159,6 +167,7 @@ def run_optimisation_model_on_data(profit_optimisation_model: ProfitOptimisation
                                                     air_pressure_values[i],
                                                     atmospheric_CO2_concentration_values[i],
                                                     intercellular_oxygen_values[i],
+                                                    photosynthetically_active_radiation_values[i],
                                                     number_of_leaf_water_potential_sample_points)
 
     return optimal_leaf_water_potentials, net_CO2_uptake_values, transpiration_rate_values
