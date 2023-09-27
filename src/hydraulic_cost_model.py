@@ -20,22 +20,21 @@ class HydraulicCostModel:
         """
 
         @param hydraulic_conductance_model:
-        @param saturated_water_potential:
-        @param critical_leaf_water_potential:
+        @param critical_leaf_water_potential: (MPa)
         """
         self._hydraulic_conductance_model = hydraulic_conductance_model
         self._critical_leaf_water_potential = critical_leaf_water_potential
 
-        self._critical_hydraulic_conductance = (
-            hydraulic_conductance_model.conductance(critical_leaf_water_potential))
+        self._critical_hydraulic_conductance = \
+            hydraulic_conductance_model.conductance(critical_leaf_water_potential)
 
     # ----- Hydraulic cost ------
     def hydraulic_cost_as_a_function_of_leaf_water_potential(self, leaf_water_potentials, soil_water_potential):
 
         """
 
-        @param leaf_water_potentials: 1d numpy array (Pa)
-        @param soil_water_potential: float (Pa)
+        @param leaf_water_potentials: 1d numpy array (MPa)
+        @param soil_water_potential: float (MPa)
         @return: array of hydraulic costs
         """
 
@@ -44,8 +43,8 @@ class HydraulicCostModel:
     def hydraulic_cost(self, leaf_water_potential, soil_water_potential):
         """
 
-        @param leaf_water_potential: (Pa)
-        @param soil_water_potential: (Pa)
+        @param leaf_water_potential: (MPa)
+        @param soil_water_potential: (MPa)
         @return: hydraulic cost (unitless)
         """
 
@@ -61,8 +60,8 @@ class HydraulicCostModel:
 
         """
 
-        @param water_potential: (Pa)
-        @return: hydraulic conductance (mol m-2 s-1 Pa-1)
+        @param water_potential: (MPa)
+        @return: hydraulic conductance (mmol m-2 s-1 MPa-1)
         """
 
         return self._hydraulic_conductance_model.conductance(water_potential)
@@ -71,8 +70,8 @@ class HydraulicCostModel:
 
         """
 
-        @param soil_water_potential: (Pa)
-        @return: instantaneous maximum hydraulic conductance (mol m-2 s-1 Pa-1)
+        @param soil_water_potential: (MPa)
+        @return: instantaneous maximum hydraulic conductance (mmol m-2 s-1 MPa-1)
         """
 
         return self.hydraulic_conductance(soil_water_potential)
@@ -81,10 +80,10 @@ class HydraulicCostModel:
         """
         Calculates the transpiration rate across the water potentials using the trapezium integral approximation.
         Simply calls the same method from the hydraulic conductance model
-        @param min_water_potential: (Pa)
-        @param max_water_potential: (Pa)
+        @param min_water_potential: (MPa)
+        @param max_water_potential: (MPa)
         @param steps: number of steps for integral approximation (unitless)
-        @return: (mol m-2 s-1)
+        @return: (mmol m-2 s-1)
         """
         return self._hydraulic_conductance_model.transpiration(min_water_potential, max_water_potential, steps)
 

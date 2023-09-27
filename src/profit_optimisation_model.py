@@ -143,15 +143,18 @@ def run_optimisation_model_on_data(profit_optimisation_model: ProfitOptimisation
 
     @param profit_optimisation_model:
     @param time_steps:
-    @param soil_water_potential_values:
-    @param air_temperature_values:
-    @param air_vapour_pressure_deficit_values:
-    @param air_pressure_values:
-    @param atmospheric_CO2_concentration_values:
-    @param intercellular_oxygen_values:
-    @param photosynthetically_active_radiation_values:
+    @param soil_water_potential_values: MPa
+    @param air_temperature_values: K
+    @param air_vapour_pressure_deficit_values: kPa
+    @param air_pressure_values: kPa
+    @param atmospheric_CO2_concentration_values: umol mol-1
+    @param intercellular_oxygen_values: umol mol-1
+    @param photosynthetically_active_radiation_values: umol m-2 s-1
     @param number_of_leaf_water_potential_sample_points:
-    @return:
+
+    @return: optimal leaf water potentials: MPa
+    @return: net CO2 uptake values: umol m-2 s-1
+    @return: transpiration rates: mmol m-2 s-1
     """
 
     # Setup output arrays

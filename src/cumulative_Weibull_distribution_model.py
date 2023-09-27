@@ -18,8 +18,8 @@ class CumulativeWeibullDistribution:
 
         """
 
-        @param maximum_conductance: (mol m-2 s-1 Pa-1)
-        @param sensitivity_parameter: (Pa)
+        @param maximum_conductance: (mmol m-2 s-1 MPa-1)
+        @param sensitivity_parameter: (MPa)
         @param shape_parameter: (unitless)
         """
 
@@ -31,8 +31,8 @@ class CumulativeWeibullDistribution:
 
         """
 
-        @param water_potential: (Pa)
-        @return: conductance (mol m-2 s-1 Pa-1)
+        @param water_potential: (MPa)
+        @return: conductance (mmol m-2 s-1 MPa-1)
         """
 
         exponent = - power(water_potential/self.sensitivity_parameter, self.shape_parameter)
@@ -43,7 +43,7 @@ class CumulativeWeibullDistribution:
         """
 
         @param conductivity_loss_fraction: (unitless)
-        @return: (Pa)
+        @return: (MPa)
         """
 
         conductivity_fraction = 1 - conductivity_loss_fraction
@@ -53,8 +53,8 @@ class CumulativeWeibullDistribution:
     def water_potential_from_conductance(self, conductance):
         """
 
-        @param conductance: (mol m-2 s-1 Pa-1)
-        @return: (Pa)
+        @param conductance: (mmol m-2 s-1 MPa-1)
+        @return: (MPa)
         """
 
         conductivity_loss_fraction = 1 - conductance/self.maximum_conductance
@@ -64,10 +64,10 @@ class CumulativeWeibullDistribution:
     def transpiration(self, min_water_potential, max_water_potential, steps = 100):
         """
         Calculates the transpiration rate across the water potentials using the trapezium integral approximation
-        @param min_water_potential: (Pa)
-        @param max_water_potential: (Pa)
+        @param min_water_potential: (MPa)
+        @param max_water_potential: (MPa)
         @param steps: number of steps for integral approximation (unitless)
-        @return: (mol m-2 s-1)
+        @return: (mmol m-2 s-1)
         """
 
         water_potential_values = linspace(min_water_potential, max_water_potential, steps)
@@ -79,14 +79,14 @@ class CumulativeWeibullDistribution:
     @property
     def maximum_conductance(self):
         """
-        @return: (mol m-2 s-1 Pa-1)
+        @return: (mmol m-2 s-1 MPa-1)
         """
         return self._maximum_conductance
 
     @property
     def sensitivity_parameter(self):
         """
-        @return: (Pa)
+        @return: (MPa)
         """
         return self._sensitivity_parameter
 
@@ -107,9 +107,9 @@ def cumulative_weibull_distribution_from_conductance_loss_at_given_water_potenti
     """
     Creates a cumulative Weibull distribution from the fractional conductive loss at two given water potentials
 
-    @param maximum_conductance: (mol m-2 s-1 Pa-1)
-    @param water_potential_1: (Pa)
-    @param water_potential_2: (Pa)
+    @param maximum_conductance: (mmol m-2 s-1 MPa-1)
+    @param water_potential_1: (MPa)
+    @param water_potential_2: (MPa)
     @param conductance_loss_fraction_1: (unitless)
     @param conductance_loss_fraction_2: (unitless)
 
