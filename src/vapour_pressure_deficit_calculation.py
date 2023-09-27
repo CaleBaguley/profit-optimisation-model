@@ -13,12 +13,12 @@ def saturation_vapour_pressure(air_temperature_K):
     """
 
     @param air_temperature_K: K
-    @return: Pa K-1
+    @return: kPa
     """
 
     air_temperature_C = degrees_kelvin_to_centigrade(air_temperature_K)
 
-    return 613.75 * exp((17.502 * air_temperature_C) / (240.97 + air_temperature_C))
+    return 0.61078 * exp((17.27 * air_temperature_C) / (237.3 + air_temperature_C))
 
 
 def vapour_pressure(specific_humidity, air_pressure):
