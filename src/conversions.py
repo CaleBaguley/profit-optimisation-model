@@ -10,8 +10,8 @@ GRAMS_PER_MOLE_OF_WATER: float = 18.02  # g mol-1
 GRAMS_PER_MOLE_OF_CARBON: float = 12.  # g mol-1
 
 # radiation conversions
-PHOTOSYNTHETICALLY_ACTIVE_RADIATION_PER_UNIT_SHORT_WAVE_RADIATION: float = 2.3
-JOULES_PER_MICRO_MOLE_OF_LIGHT: float = 4.57  # J mmol-1
+PHOTOSYNTHETICALLY_ACTIVE_RADIATION_PER_UNIT_SHORT_WAVE_RADIATION: float = 0.5
+JOULES_PER_MICRO_MOLE_OF_LIGHT: float = 1/4.57  # J umol-1
 
 # Seconds per unit time
 SECONDS_PER_HALF_HOUR: float = 1800.  # s
@@ -137,8 +137,8 @@ def photosynthetically_active_radiation_to_short_wave(photosynthetically_active_
 def micro_moles_of_light_to_joules(micro_moles_of_light):
     """
     Converts from photons of light in micromoles to energy in joules
-    @param micro_moles_of_light: photons of light in micromoles
-    @return: energy in joules
+    @param micro_moles_of_light: umol
+    @return: energy in joules: J
     """
     return micro_moles_of_light * JOULES_PER_MICRO_MOLE_OF_LIGHT
 
@@ -146,8 +146,8 @@ def micro_moles_of_light_to_joules(micro_moles_of_light):
 def light_energy_in_joules_to_micro_moles_of_light(light_energy_joules):
     """
         Converts from energy in joules to photons of light in micromoles
-        @param light_energy_joules: energy in photons
-        @return: photons in micromoles
+        @param light_energy_joules: J
+        @return: photons in micromoles: umol
         """
     return light_energy_joules / JOULES_PER_MICRO_MOLE_OF_LIGHT
 
@@ -188,6 +188,7 @@ def per_half_hour_to_per_second(per_half_hour):
     @return: s-1
     """
     return per_half_hour / SECONDS_PER_HALF_HOUR
+
 
 # -- seconds and hours --
 def hours_to_seconds(time_in_hours):
@@ -245,6 +246,7 @@ def per_second_to_per_day(per_second):
     """
 
     return per_second * SECONDS_PER_DAY
+
 
 # ---- Temperature conversions ----
 # kelvin and centigrade
