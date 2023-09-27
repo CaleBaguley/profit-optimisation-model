@@ -6,21 +6,21 @@ from numpy import power
 
 # -- Conversion constants: --
 # grams per unit moles
-GRAMS_PER_MOLE_OF_WATER: float = 18.02 # g mol-1
-GRAMS_PER_MOLE_OF_CARBON: float = 12. # g mol-1
+GRAMS_PER_MOLE_OF_WATER: float = 18.02  # g mol-1
+GRAMS_PER_MOLE_OF_CARBON: float = 12.  # g mol-1
 
 # radiation conversions
 PHOTOSYNTHETICALLY_ACTIVE_RADIATION_PER_UNIT_SHORT_WAVE_RADIATION: float = 2.3
-JOULES_PER_MICRO_MOLE_OF_LIGHT: float = 4.57 # J mmol-1
+JOULES_PER_MICRO_MOLE_OF_LIGHT: float = 4.57  # J mmol-1
 
 # Seconds per unit time
-SECONDS_PER_HALF_HOUR: float = 1800. # s
-SECONDS_PER_HOUR: float = 3600. # s
-SECONDS_PER_DAY: float = 86400. # s
+SECONDS_PER_HALF_HOUR: float = 1800.  # s
+SECONDS_PER_HOUR: float = 3600.  # s
+SECONDS_PER_DAY: float = 86400.  # s
 
 # Temperature conversions
-ZERO_DEGREES_CENTIGRADE_IN_KELVIN: float = 273.15 # K
-TWENTY_FIVE_DEGREES_CENTIGRADE_IN_KELVIN: float = 298.15 # K
+ZERO_DEGREES_CENTIGRADE_IN_KELVIN: float = 273.15  # K
+TWENTY_FIVE_DEGREES_CENTIGRADE_IN_KELVIN: float = 298.15  # K
 
 # Stomatal conductance ratios
 RATIO_OF_STOMATAL_CONDUCTANCE_OF_WATER_TO_CARBON: float = 1.57
@@ -32,7 +32,7 @@ RATIO_OF_LEAF_BOUNDARY_CONDUCTANCE_OF_CARBON_TO_WATER: float = (RATIO_OF_LEAF_BO
                                                                 * RATIO_OF_LEAF_BOUNDARY_CONDUCTANCE_OF_HEAT_TO_WATER)
 
 # Latent heat of water
-LATENT_HEAT_OF_VAPORISATION_OF_WATER: float = 44200 # J mol-1
+LATENT_HEAT_OF_VAPORISATION_OF_WATER: float = 44200  # J mol-1
 
 # Dict matching si unit prefixes to their scale. Used in magnitude_conversion().
 symbol_magnitude_dict = {'Y': power(10., 24),
