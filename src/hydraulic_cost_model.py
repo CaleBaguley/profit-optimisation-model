@@ -10,13 +10,11 @@ from src.cumulative_Weibull_distribution_model import CumulativeWeibullDistribut
 class HydraulicCostModel:
 
     _hydraulic_conductance_model: CumulativeWeibullDistribution
-    _saturated_water_potential: float
     _critical_leaf_water_potential: float
     _critical_hydraulic_conductance: float
 
     def __init__(self,
                  hydraulic_conductance_model: CumulativeWeibullDistribution,
-                 saturated_water_potential: float,
                  critical_leaf_water_potential: float):
 
         """
@@ -26,7 +24,6 @@ class HydraulicCostModel:
         @param critical_leaf_water_potential:
         """
         self._hydraulic_conductance_model = hydraulic_conductance_model
-        self._saturated_water_potential = saturated_water_potential
         self._critical_leaf_water_potential = critical_leaf_water_potential
 
         self._critical_hydraulic_conductance = (
@@ -94,10 +91,6 @@ class HydraulicCostModel:
     @property
     def hydraulic_conductance_model(self):
         return self._hydraulic_conductance_model
-
-    @property
-    def saturated_water_potential(self):
-        return self._saturated_water_potential
 
     @property
     def critical_leaf_water_potential(self):
