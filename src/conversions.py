@@ -2,6 +2,7 @@
 A set of functions for converting between various units
 """
 
+from src.constants import MOLAR_MASS_OF_WATER
 from numpy import power
 
 # -- Conversion constants: --
@@ -33,6 +34,7 @@ RATIO_OF_LEAF_BOUNDARY_CONDUCTANCE_OF_CARBON_TO_WATER: float = (RATIO_OF_LEAF_BO
 
 # Latent heat of water
 LATENT_HEAT_OF_VAPORISATION_OF_WATER: float = 44200  # J mol-1
+LATENT_HEAT_OF_WATER: float = 2.501e6  # J kg-1
 
 # Dict matching si unit prefixes to their scale. Used in magnitude_conversion().
 symbol_magnitude_dict = {'Y': power(10., 24),
@@ -367,19 +369,27 @@ def convert_stomatal_conductance_of_water_to_that_of_carbon(conductance_of_water
 
 
 # ---- Transpiration and latent heat of water --
-def convert_transpiration_rate_to_latent_energy(transpiration_rate):
+def convert_transpiration_rate_to_latent_energy(transpiration_rate, air_temperature):
     """
 
     @param transpiration_rate: mol m-2 s-1
+    @param air_temperature: K
     @return: J m-2 s-1 or W m-2
     """
-    return transpiration_rate * LATENT_HEAT_OF_VAPORISATION_OF_WATER
+
+    latent_heat_of_vaporisation_of_water = (LATENT_HEAT_OF_WATER - 2.365E3 * air_temperature) * MOLAR_MASS_OF_WATER
+
+    return transpiration_rate * latent_heat_of_vaporisation_of_water
 
 
-def convert_latent_energy_to_transpiration(latent_energy):
+def convert_latent_energy_to_transpiration(latent_energy, air_temperature):
     """
 
     @param latent_energy: J m-2 s-1 or W m-2
+    @param air_temperature: K
     @return: mol m-2 s-1
     """
+
+    latent_heat_of_vaporisation_of_water = (LATENT_HEAT_OF_WATER - 2.365E3 * air_temperature) * MOLAR_MASS_OF_WATER
+
     return latent_energy / LATENT_HEAT_OF_VAPORISATION_OF_WATER
