@@ -4,7 +4,7 @@
 -------------------------------------------------------------------------
 """
 
-from numpy import zeros, max
+from numpy import zeros, max, nan_to_num
 from src.leaf_air_coupling_model import LeafAirCouplingModel
 from src.photosynthesis_model import PhotosynthesisModelDummy
 
@@ -61,4 +61,8 @@ class CO2GainModel:
 
         maximum_CO2_uptake = max(net_CO2_uptake)
 
-        return net_CO2_uptake / maximum_CO2_uptake, maximum_CO2_uptake
+        CO2_gain = net_CO2_uptake / maximum_CO2_uptake
+
+        CO2_gain = nan_to_num(CO2_gain, nan = 0.)
+
+        return CO2_gain, maximum_CO2_uptake
