@@ -22,6 +22,16 @@ class PhotosynthesisModelDummy:
                                         intercellular_O = None,
                                         utilized_photosynthetically_active_radiation = None):
 
+        """
+
+        @param stomatal_conductance_to_CO2: mol m-2 s-1
+        @param atmospheric_CO2_concentration: umol mol-1
+        @param leaf_temperature: K
+        @param intercellular_O: umol mol-1
+        @param utilized_photosynthetically_active_radiation: (umol m-2 unit time-1)
+        @return: intercellular CO2 concentration (umol mol-1)
+        """
+
         raise Exception("intercellular_CO2_concentration method not implemented in PhotosynthesisModelDummy class")
 
     def net_rate_of_CO2_assimilation(self,
