@@ -57,7 +57,8 @@ class PhotosynthesisModelDummy:
             intercellular_O,
             utilized_photosynthetically_active_radiation)
 
-        return (atmospheric_CO2_concentration - intercellular_CO2_concentration) * stomatal_conductance_to_CO2
+        return ((atmospheric_CO2_concentration - intercellular_CO2_concentration) * stomatal_conductance_to_CO2,
+                intercellular_CO2_concentration)
 
 
 class PhotosynthesisModelRubiscoLimited(PhotosynthesisModelDummy):

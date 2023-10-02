@@ -63,7 +63,10 @@ class ProfitOptimisationModel:
                 self._hydraulic_cost_model.transpiration(leaf_water_potentials[i],
                                                          soil_water_potential)
 
-        CO2_gain, maximum_CO2_uptake = \
+        (CO2_gain,
+         maximum_CO2_uptake,
+         intercellular_CO2_as_a_function_of_leaf_water_potential,
+         stomatal_conductance_to_CO2_as_a_function_of_leaf_water_potential) = \
             self._CO2_gain_model.CO2_gain(transpiration_as_a_function_of_leaf_water_potential,
                                           air_temperature,
                                           air_vapour_pressure_deficit,
@@ -76,7 +79,9 @@ class ProfitOptimisationModel:
                 CO2_gain,
                 hydraulic_costs,
                 maximum_CO2_uptake,
-                transpiration_as_a_function_of_leaf_water_potential)
+                transpiration_as_a_function_of_leaf_water_potential,
+                intercellular_CO2_as_a_function_of_leaf_water_potential,
+                stomatal_conductance_to_CO2_as_a_function_of_leaf_water_potential)
 
     def optimal_state(self,
                       soil_water_potential,
@@ -109,8 +114,12 @@ class ProfitOptimisationModel:
                                          critical_leaf_water_potential,
                                          num=number_of_sample_points)
 
-        (profit, CO2_gain, hydraulic_costs, maximum_net_CO2_uptake,
-         transpiration_as_a_function_of_leaf_water_potential) = \
+        (profit, CO2_gain,
+         hydraulic_costs,
+         maximum_net_CO2_uptake,
+         transpiration_as_a_function_of_leaf_water_potential,
+         intercellular_CO2_as_a_function_of_leaf_water_potential,
+         stomatal_conductance_to_CO2_as_a_function_of_leaf_water_potential) = \
             self.profit_as_a_function_of_leaf_water_potential(leaf_water_potentials,
                                                               soil_water_potential,
                                                               air_temperature,
@@ -125,8 +134,15 @@ class ProfitOptimisationModel:
         optimal_leaf_water_potential = leaf_water_potentials[maximum_profit_id]
         net_CO2_uptake = maximum_net_CO2_uptake * CO2_gain[maximum_profit_id]
         transpiration_rate = transpiration_as_a_function_of_leaf_water_potential[maximum_profit_id]
+        intercellular_CO2 = intercellular_CO2_as_a_function_of_leaf_water_potential[maximum_profit_id]
+        stomatal_conductance_to_CO2 = \
+            stomatal_conductance_to_CO2_as_a_function_of_leaf_water_potential[maximum_profit_id]
 
-        return optimal_leaf_water_potential, net_CO2_uptake, transpiration_rate
+        return (optimal_leaf_water_potential,
+                net_CO2_uptake,
+                transpiration_rate,
+                intercellular_CO2,
+                stomatal_conductance_to_CO2)
 
 
 def run_optimisation_model_on_data(profit_optimisation_model: ProfitOptimisationModel,
@@ -161,9 +177,15 @@ def run_optimisation_model_on_data(profit_optimisation_model: ProfitOptimisation
     optimal_leaf_water_potentials = zeros(len(time_steps))
     net_CO2_uptake_values = zeros(len(time_steps))
     transpiration_rate_values = zeros(len(time_steps))
+    intercellular_CO2_values = zeros(len(time_steps))
+    stomatal_conductance_to_CO2_values = zeros(len(time_steps))
 
     for i in range(len(time_steps)):
-        optimal_leaf_water_potentials[i], net_CO2_uptake_values[i], transpiration_rate_values[i] = \
+        (optimal_leaf_water_potentials[i],
+         net_CO2_uptake_values[i],
+         transpiration_rate_values[i],
+         intercellular_CO2_values[i],
+         stomatal_conductance_to_CO2_values[i]) = \
             profit_optimisation_model.optimal_state(soil_water_potential_values[i],
                                                     air_temperature_values[i],
                                                     air_vapour_pressure_deficit_values[i],
@@ -173,4 +195,8 @@ def run_optimisation_model_on_data(profit_optimisation_model: ProfitOptimisation
                                                     photosynthetically_active_radiation_values[i],
                                                     number_of_leaf_water_potential_sample_points)
 
-    return optimal_leaf_water_potentials, net_CO2_uptake_values, transpiration_rate_values
+    return (optimal_leaf_water_potentials,
+            net_CO2_uptake_values,
+            transpiration_rate_values,
+            intercellular_CO2_values,
+            stomatal_conductance_to_CO2_values)
