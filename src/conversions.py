@@ -392,10 +392,8 @@ def convert_latent_energy_to_transpiration(latent_energy, air_temperature):
     @return: mol m-2 s-1
     """
 
-    #TODO: temperature should be in C
-
     air_temperature_C = degrees_kelvin_to_centigrade(air_temperature)
 
     latent_heat_of_vaporisation_of_water = (LATENT_HEAT_OF_WATER - 2.365E3 * air_temperature_C) * MOLAR_MASS_OF_WATER
 
-    return latent_energy / LATENT_HEAT_OF_VAPORISATION_OF_WATER
+    return latent_energy / latent_heat_of_vaporisation_of_water
