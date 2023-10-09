@@ -53,7 +53,7 @@ class CO2GainModel:
                                                                              air_pressure)
 
             # Need to convert from mmol m-2 s-1 to mol m-2 s-1
-            stomatal_conductance_to_CO2 /= 1000
+            stomatal_conductance_to_CO2 = stomatal_conductance_to_CO2/1000
 
             (net_CO2_uptake[i],
             intercellular_CO2_as_a_function_of_leaf_water_potential[i]) = \
