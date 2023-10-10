@@ -35,9 +35,10 @@ class CumulativeWeibullDistribution:
         @return: conductance (mmol m-2 s-1 MPa-1)
         """
 
-        exponent = - power(water_potential/self.sensitivity_parameter, self.shape_parameter)
-
-        return self.maximum_conductance * exp(exponent)
+        return cumulative_Weibull_distribution(water_potential,
+                                               self.maximum_conductance,
+                                               self.sensitivity_parameter,
+                                               self.shape_parameter)
 
     def water_potential_from_conductivity_loss_fraction(self, conductivity_loss_fraction):
         """
@@ -97,6 +98,21 @@ class CumulativeWeibullDistribution:
         """
         return self._shape_parameter
 
+
+def cumulative_Weibull_distribution(water_potential, maximum_conductance, sensitivity_parameter, shape_parameter):
+
+    """
+
+    @param water_potentials: (MPa)
+    @param maximum_conductance: (mmol m-2 s-1 MPa-1)
+    @param sensitivity_parameter: (MPa)
+    @param shape_parameter: (unitless)
+    @return: (MPa)
+    """
+
+    exponent = - power(water_potential / sensitivity_parameter, shape_parameter)
+
+    return maximum_conductance * exp(exponent)
 
 def cumulative_weibull_distribution_from_conductance_loss_at_given_water_potentials(maximum_conductance,
                                                                                     water_potential_1,
