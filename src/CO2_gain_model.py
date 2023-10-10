@@ -4,9 +4,10 @@
 -------------------------------------------------------------------------
 """
 
-from numpy import zeros, max, nan_to_num
+from numpy import zeros, max, nan_to_num, where
 from src.leaf_air_coupling_model import LeafAirCouplingModel
 from src.photosynthesis_model import PhotosynthesisModelDummy
+from src.conversions import magnitude_conversion
 
 
 class CO2GainModel:
@@ -53,7 +54,7 @@ class CO2GainModel:
                                                                              air_pressure)
 
             # Need to convert from mmol m-2 s-1 to mol m-2 s-1
-            stomatal_conductance_to_CO2 = stomatal_conductance_to_CO2/1000
+            stomatal_conductance_to_CO2 = magnitude_conversion(stomatal_conductance_to_CO2, 'm', '')
 
             (net_CO2_uptake[i],
             intercellular_CO2_as_a_function_of_leaf_water_potential[i]) = \
@@ -67,9 +68,11 @@ class CO2GainModel:
 
         maximum_CO2_uptake = max(net_CO2_uptake)
 
-        CO2_gain = net_CO2_uptake / maximum_CO2_uptake
+        if(maximum_CO2_uptake > 0.):
+            CO2_gain = net_CO2_uptake / maximum_CO2_uptake
 
-        CO2_gain = nan_to_num(CO2_gain, nan = 0.)
+        else:
+            CO2_gain = zeros(len(net_CO2_uptake))
 
         return (CO2_gain,
                 maximum_CO2_uptake,
