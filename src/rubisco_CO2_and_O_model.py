@@ -31,7 +31,7 @@ class RubiscoRates:
         """
 
         self._maximum_carboxylation_rate_model = maximum_carboxylation_rate_model
-        self._maximum_oxygenation_rate_model = maximum_oxygenation_rate_model
+        #self._maximum_oxygenation_rate_model = maximum_oxygenation_rate_model
         self._michaelis_menten_constant_CO2_model = michaelis_menten_constant_CO2_model
 
         if michaelis_menten_constant_O_model is None:
@@ -94,8 +94,8 @@ class RubiscoRates:
     def maximum_carboxylation_rate(self, temperature):
         return self._maximum_carboxylation_rate_model.get_value_at_temperature(temperature)
 
-    def maximum_oxygenation_rate(self, temperature):
-        return self._maximum_oxygenation_rate_model.get_value_at_temperature(temperature)
+    #def maximum_oxygenation_rate(self, temperature):
+    #    return self._maximum_oxygenation_rate_model.get_value_at_temperature(temperature)
 
     def carboxylation_rate(self, intercellular_CO2_concentration, intercellular_O_concentration,
                            temperature):
