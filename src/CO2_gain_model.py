@@ -4,7 +4,7 @@
 -------------------------------------------------------------------------
 """
 
-from numpy import zeros, max, nan_to_num, where
+from numpy import zeros, max, nan_to_num, where, nanmax
 from src.leaf_air_coupling_model import LeafAirCouplingModel
 from src.photosynthesis_model import PhotosynthesisModelDummy
 from src.conversions import magnitude_conversion
@@ -66,7 +66,9 @@ class CO2GainModel:
 
             stomatal_conductance_to_CO2_as_a_function_of_leaf_water_potential[i] = stomatal_conductance_to_CO2
 
-        maximum_CO2_uptake = max(net_CO2_uptake)
+        maximum_CO2_uptake = nanmax(net_CO2_uptake)
+
+        #print("max CO2 uptake: ",maximum_CO2_uptake)
 
         if(maximum_CO2_uptake > 0.):
             CO2_gain = net_CO2_uptake / maximum_CO2_uptake
