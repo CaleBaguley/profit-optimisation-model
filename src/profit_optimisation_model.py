@@ -9,7 +9,7 @@ from src.leaf_air_coupling_model import LeafAirCouplingModel
 from src.CO2_gain_model import CO2GainModel
 
 from numpy import zeros, linspace
-from numpy import argmax
+from numpy import argmax, argwhere, nanargmax
 
 
 class ProfitOptimisationModel:
@@ -75,6 +75,10 @@ class ProfitOptimisationModel:
                                           intercellular_oxygen,
                                           photosynthetically_active_radiation)
 
+        print("\nca:", atmospheric_CO2_concentration)
+        print("ci: ", intercellular_CO2_as_a_function_of_leaf_water_potential)
+        print("gs: ", stomatal_conductance_to_CO2_as_a_function_of_leaf_water_potential)
+
         return (CO2_gain - hydraulic_costs,
                 CO2_gain,
                 hydraulic_costs,
@@ -129,7 +133,14 @@ class ProfitOptimisationModel:
                                                               intercellular_oxygen,
                                                               photosynthetically_active_radiation)
 
-        maximum_profit_id = argmax(profit)
+        # Limit Ci/Ca to < 0.95
+        realistic_intercellular_CO2_concentration_arg = argwhere(intercellular_CO2_as_a_function_of_leaf_water_potential < 0.95*atmospheric_CO2_concentration)
+        maximum_profit_id = 0
+        if(len(realistic_intercellular_CO2_concentration_arg) > 0):
+            maximum_profit_id = argmax(profit[realistic_intercellular_CO2_concentration_arg])
+
+
+        maximum_profit_id_old = nanargmax(profit)
 
         optimal_leaf_water_potential = leaf_water_potentials[maximum_profit_id]
         net_CO2_uptake = maximum_net_CO2_uptake * CO2_gain[maximum_profit_id]
@@ -137,6 +148,19 @@ class ProfitOptimisationModel:
         intercellular_CO2 = intercellular_CO2_as_a_function_of_leaf_water_potential[maximum_profit_id]
         stomatal_conductance_to_CO2 = \
             stomatal_conductance_to_CO2_as_a_function_of_leaf_water_potential[maximum_profit_id]
+
+
+        print("\noptimal index position: ", maximum_profit_id / len(profit), maximum_profit_id, len(profit))
+        print("old optimal index position: ", maximum_profit_id_old / len(profit), maximum_profit_id_old, len(profit))
+        print("optimal leaf water potential: ", optimal_leaf_water_potential, " [", soil_water_potential, ", ", critical_leaf_water_potential, "]")
+        print("transpiration rate: ", transpiration_rate, " mmol m-2 s-1")
+        print("inter cellular CO2: ", intercellular_CO2, " umol mol-1")
+        print("atmospheric CO2: ", atmospheric_CO2_concentration, " umol mol-1")
+        print("CO2 ratio: ", intercellular_CO2/atmospheric_CO2_concentration)
+        print("net CO2 uptake: ", net_CO2_uptake, "umol m-2 s-1")
+        print("stomatal conductance to CO2: ", stomatal_conductance_to_CO2)
+        print("air temperature: ", air_temperature, " K")
+        print("photosyntheticaly active radiation: ", photosynthetically_active_radiation, " umol m-2 s-1")
 
         return (optimal_leaf_water_potential,
                 net_CO2_uptake,
