@@ -8,6 +8,8 @@ from src.TemperatureDependenceModels.temperature_dependence_model import (Temper
                                                                           LowTemperatureAdjustedModel)
 from src.TemperatureDependenceModels.arrhenius_and_peaked_arrhenius_function import PeakedArrheniusModel
 from numpy import roots, argwhere, amin
+import math
+import numpy as np
 
 
 class ElectronTransportRateModel:
@@ -50,8 +52,11 @@ class ElectronTransportRateModel:
         c = utilized_photosynthetically_active_radiation * maximum_transport_rate
 
         # Uses numpy to calculate possible roots
-        solutions = roots([a, b, c])
+        #solutions = roots([a, b, c])
 
+        return quadratic(a, b, c, large=False)
+
+        """
         # electron transport rate can only ever be positive
         solutions = solutions[argwhere(solutions >= 0)]
 
@@ -60,4 +65,50 @@ class ElectronTransportRateModel:
             return 0.
 
         # Return the smallest possible positive solution
-        return amin(solutions)
+        return amin(solutions)"""
+
+def quadratic(a=None, b=None, c=None, large=False):
+    """ minimilist quadratic solution as root for J solution should always
+    be positive, so I have excluded other quadratic solution steps. I am
+    only returning the smallest of the two roots
+
+    Parameters:
+    ----------
+    a : float
+        co-efficient
+    b : float
+        co-efficient
+    c : float
+        co-efficient
+
+    Returns:
+    -------
+    val : float
+        positive root
+    """
+    d = b**2.0 - 4.0 * a * c # discriminant
+    if d < 0.0:
+        raise ValueError('imaginary root found')
+    #root1 = np.where(d>0.0, (-b - np.sqrt(d)) / (2.0 * a), d)
+    #root2 = np.where(d>0.0, (-b + np.sqrt(d)) / (2.0 * a), d)
+
+    if large:
+        if math.isclose(a, 0.0) and b > 0.0:
+            root = -c / b
+        elif math.isclose(a, 0.0) and math.isclose(b, 0.0):
+            root = 0.0
+            if c != 0.0:
+                raise ValueError('Cant solve quadratic')
+        else:
+            root = (-b + np.sqrt(d)) / (2.0 * a)
+    else:
+        if math.isclose(a, 0.0) and b > 0.0:
+            root = -c / b
+        elif math.isclose(a, 0.0) and math.isclose(b, 0.0):
+            root = 0.0
+            if c != 0.0:
+                raise ValueError('Cant solve quadratic')
+        else:
+            root = (-b - np.sqrt(d)) / (2.0 * a)
+
+    return root
