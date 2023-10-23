@@ -9,8 +9,10 @@ from src.electron_transport_rate_model import ElectronTransportRateModel
 from src.TemperatureDependenceModels.temperature_dependence_model import TemperatureDependenceModel
 from src.TemperatureDependenceModels.arrhenius_and_peaked_arrhenius_function import ArrheniusModel
 from src.TemperatureDependenceModels.Q10_temperature_dependence_model import Q10TemperatureDependenceModel
+import math
+import numpy as np
 
-from numpy import roots, max
+from numpy import roots, nanmax
 
 
 class PhotosynthesisModelDummy:
@@ -57,6 +59,8 @@ class PhotosynthesisModelDummy:
             intercellular_O,
             utilized_photosynthetically_active_radiation)
 
+        print("net CO2: ", (atmospheric_CO2_concentration - intercellular_CO2_concentration) * stomatal_conductance_to_CO2)
+
         return ((atmospheric_CO2_concentration - intercellular_CO2_concentration) * stomatal_conductance_to_CO2,
                 intercellular_CO2_concentration)
 
@@ -100,7 +104,15 @@ class PhotosynthesisModelRubiscoLimited(PhotosynthesisModelDummy):
 
         maximum_carboxylation_rate = self._rubisco_rates_model.maximum_carboxylation_rate(leaf_temperature)
 
+        mitochondrial_respiration_rate = 0.015*maximum_carboxylation_rate
+
         CO2_compensation_point = self._CO2_compensation_point_model.get_value_at_temperature(leaf_temperature)
+
+        print(stomatal_conductance_to_CO2)
+        print(atmospheric_CO2_concentration)
+        print(mitochondrial_respiration_rate)
+        print(michaelis_menten_constant_carboxylation)
+        print(maximum_carboxylation_rate)
 
         # Quadratic equation components (Ax^2 + Bx + C = 0)
         A = -stomatal_conductance_to_CO2
@@ -116,8 +128,19 @@ class PhotosynthesisModelRubiscoLimited(PhotosynthesisModelDummy):
 
         # Find the roots of the quadratic equation
         intercellular_CO2_concentration = roots([A, B, C])
+        intercellular_CO2_concentration = max(intercellular_CO2_concentration)
 
-        return max(intercellular_CO2_concentration)
+
+        #intercellular_CO2_concentration = quadratic(a=A, b=B, c=C, large=True)
+
+        print("roots: ", intercellular_CO2_concentration)
+        if(intercellular_CO2_concentration is None):
+            return np.nan
+        elif (intercellular_CO2_concentration < 0. or intercellular_CO2_concentration > atmospheric_CO2_concentration):
+            return np.nan
+
+        return intercellular_CO2_concentration
+        #return max(intercellular_CO2_concentration)
 
 
 class PhotosynthesisModelElectronTransportLimited(PhotosynthesisModelDummy):
@@ -125,22 +148,26 @@ class PhotosynthesisModelElectronTransportLimited(PhotosynthesisModelDummy):
     _electron_transport_rate_model: ElectronTransportRateModel
     _CO2_compensation_point_model: TemperatureDependenceModel
     _mitochondrial_respiration_rate_model: TemperatureDependenceModel
+    _rubisco_rates_model: RubiscoRates
 
     def __init__(self,
                  electron_transport_rate_model = ElectronTransportRateModel(),
                  CO2_compensation_point_model = ArrheniusModel(42.75, 37830.0),
-                 mitochondrial_respiration_rate_model = Q10TemperatureDependenceModel(0.2, 2.)
+                 mitochondrial_respiration_rate_model = Q10TemperatureDependenceModel(0.2, 2.),
+                 rubisco_rates_model=RubiscoRates()
                  ):
         """
 
         @param electron_transport_rate_model:
         @param CO2_compensation_point_model:
         @param mitochondrial_respiration_rate_model:
+        @param rubisco_rates_model:
         """
 
         self._electron_transport_rate_model = electron_transport_rate_model
         self._CO2_compensation_point_model = CO2_compensation_point_model
         self._mitochondrial_respiration_rate_model = mitochondrial_respiration_rate_model
+        self._rubisco_rates_model = rubisco_rates_model
 
     def intercellular_CO2_concentration(self,
                                         stomatal_conductance_to_CO2,
@@ -158,8 +185,15 @@ class PhotosynthesisModelElectronTransportLimited(PhotosynthesisModelDummy):
         @return: intercellular CO2 concentration (umol mol-1)
         """
 
-        mitochondrial_respiration_rate = (
-            self._mitochondrial_respiration_rate_model.get_value_at_temperature(leaf_temperature))
+        if(utilized_photosynthetically_active_radiation == 0.):
+            return atmospheric_CO2_concentration
+
+        maximum_carboxylation_rate = self._rubisco_rates_model.maximum_carboxylation_rate(leaf_temperature)
+
+        mitochondrial_respiration_rate = 0.015 * maximum_carboxylation_rate
+
+        #mitochondrial_respiration_rate = (
+        #    self._mitochondrial_respiration_rate_model.get_value_at_temperature(leaf_temperature))
 
         electron_transport_rate = (
             self._electron_transport_rate_model.electron_transport_rate(leaf_temperature,
@@ -182,7 +216,20 @@ class PhotosynthesisModelElectronTransportLimited(PhotosynthesisModelDummy):
         # Find the roots of the quadratic equation
         intercellular_CO2_concentration = roots([A, B, C])
 
-        return max(intercellular_CO2_concentration)
+        if(len(intercellular_CO2_concentration) == 0):
+            return np.nan
+
+        intercellular_CO2_concentration = max(intercellular_CO2_concentration)
+
+        #intercellular_CO2_concentration = quadratic(A, B, C, large=True)
+
+        if (intercellular_CO2_concentration is None):
+            return np.nan
+        elif (intercellular_CO2_concentration < 0. or intercellular_CO2_concentration > atmospheric_CO2_concentration):
+            return np.nan
+
+        return intercellular_CO2_concentration
+        #return max(intercellular_CO2_concentration)
 
 
 class PhotosynthesisModel(PhotosynthesisModelDummy):
@@ -218,4 +265,70 @@ class PhotosynthesisModel(PhotosynthesisModelDummy):
                                               intercellular_O,
                                               utilized_photosynthetically_active_radiation))
 
-        return max([intercellular_CO2_rubisco_limited, intercellular_CO2_electron_transport_limited])
+        print("Rubisco limited: ", intercellular_CO2_rubisco_limited)
+        print("electron limited: ", intercellular_CO2_electron_transport_limited)
+
+        if((intercellular_CO2_electron_transport_limited is None) & (intercellular_CO2_rubisco_limited is None)):
+            return 0.
+        elif(intercellular_CO2_rubisco_limited is None):
+            return intercellular_CO2_electron_transport_limited
+        elif(intercellular_CO2_electron_transport_limited is None):
+            return intercellular_CO2_rubisco_limited
+
+        return nanmax([intercellular_CO2_rubisco_limited, intercellular_CO2_electron_transport_limited])
+
+
+def quadratic(a=None, b=None, c=None, large=False):
+    """ minimilist quadratic solution as root for J solution should always
+    be positive, so I have excluded other quadratic solution steps. I am
+    only returning the smallest of the two roots
+
+    Parameters:
+    ----------
+    a : float
+        co-efficient
+    b : float
+        co-efficient
+    c : float
+        co-efficient
+
+    Returns:
+    -------
+    val : float
+        positive root
+    """
+    d = b ** 2.0 - 4.0 * a * c  # discriminant
+    if d < 0.0:
+        raise ValueError('imaginary root found')
+    # root1 = np.where(d>0.0, (-b - np.sqrt(d)) / (2.0 * a), d)
+    # root2 = np.where(d>0.0, (-b + np.sqrt(d)) / (2.0 * a), d)
+
+    if large:
+        if math.isclose(a, 0.0) and b > 0.0:
+            root = -c / b
+        elif math.isclose(a, 0.0) and math.isclose(b, 0.0):
+            root = 0.0
+            if c != 0.0:
+                raise ValueError('Cant solve quadratic')
+        else:
+            root = (-b + np.sqrt(d)) / (2.0 * a)
+    else:
+        if math.isclose(a, 0.0) and b > 0.0:
+            root = -c / b
+        elif math.isclose(a, 0.0) and math.isclose(b, 0.0):
+            root = 0.0
+            if c != 0.0:
+                raise ValueError('Cant solve quadratic')
+        else:
+            root = (-b - np.sqrt(d)) / (2.0 * a)
+
+    return root
+
+
+"""def get_root(a,b,c):
+    ref_root = quad(a, b, c) * conv.ref_kPa * conv.FROM_MILI
+    
+    if (ref_root > Cs) or (ref_root < cst.zero):
+    return quad(a, b, c, large_root=False) * conv.ref_kPa * conv.FROM_MILI
+    else:
+    return ref_root"""
