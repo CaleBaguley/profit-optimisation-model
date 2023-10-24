@@ -348,26 +348,6 @@ def convert_leaf_boundary_conductance_of_water_to_that_of_heat(conductance_of_wa
     return conductance_of_water / RATIO_OF_LEAF_BOUNDARY_CONDUCTANCE_OF_HEAT_TO_WATER
 
 
-# ---- Stomatal conductance ----
-# -- Carbon and water --
-def convert_stomatal_conductance_of_carbon_to_that_of_water(conductance_of_carbon):
-    """
-    Convert the leaf boundary conductance of carbon to that of water
-    @param conductance_of_carbon: leaf boundary conductance of carbon
-    @return: leaf boundary conductance of water
-    """
-    return conductance_of_carbon * RATIO_OF_STOMATAL_CONDUCTANCE_OF_WATER_TO_CARBON
-
-
-def convert_stomatal_conductance_of_water_to_that_of_carbon(conductance_of_water):
-    """
-    Convert the leaf boundary conductance of water to that of carbon
-    @param conductance_of_water: leaf boundary conductance of water
-    @return: leaf boundary conductance of carbon
-    """
-    return conductance_of_water / RATIO_OF_STOMATAL_CONDUCTANCE_OF_WATER_TO_CARBON
-
-
 # ---- Transpiration and latent heat of water --
 def convert_transpiration_rate_to_latent_energy(transpiration_rate, air_temperature):
     """
