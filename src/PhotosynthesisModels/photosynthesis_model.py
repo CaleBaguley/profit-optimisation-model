@@ -3,8 +3,8 @@
 
 -------------------------------------------------------------------------
 """
-from src.PhotosynthesisModels.Bonan_Model import PhotosynthesisModelRubiscoLimited, \
-    PhotosynthesisModelElectronTransportLimited
+from src.PhotosynthesisModels.Bonan_Model import PhotosynthesisModelRubiscoLimitedBonan, \
+    PhotosynthesisModelElectronTransportLimitedBonan
 import math
 import numpy as np
 
@@ -62,12 +62,12 @@ class PhotosynthesisModelDummy:
 
 
 class PhotosynthesisModel(PhotosynthesisModelDummy):
-    _photosynthesis_rubisco_limited_model: PhotosynthesisModelRubiscoLimited
-    _photosynthesis_electron_transport_limited_model: PhotosynthesisModelElectronTransportLimited
+    _photosynthesis_rubisco_limited_model: PhotosynthesisModelDummy
+    _photosynthesis_electron_transport_limited_model: PhotosynthesisModelDummy
 
     def __init__(self,
-                 photosynthesis_rubisco_limited_model=PhotosynthesisModelRubiscoLimited(),
-                 photosynthesis_electron_transport_limited_model=PhotosynthesisModelElectronTransportLimited()):
+                 photosynthesis_rubisco_limited_model=PhotosynthesisModelRubiscoLimitedBonan(),
+                 photosynthesis_electron_transport_limited_model=PhotosynthesisModelElectronTransportLimitedBonan()):
         self._photosynthesis_rubisco_limited_model = photosynthesis_rubisco_limited_model
         self._photosynthesis_electron_transport_limited_model = photosynthesis_electron_transport_limited_model
 

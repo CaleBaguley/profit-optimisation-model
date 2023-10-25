@@ -9,7 +9,7 @@ from src.electron_transport_rate_model import ElectronTransportRateModel
 from src.rubisco_CO2_and_O_model import RubiscoRates
 
 
-class PhotosynthesisModelRubiscoLimited(PhotosynthesisModelDummy):
+class PhotosynthesisModelRubiscoLimitedBonan(PhotosynthesisModelDummy):
 
     _rubisco_rates_model: RubiscoRates
     _CO2_compensation_point_model: TemperatureDependenceModel
@@ -89,7 +89,7 @@ class PhotosynthesisModelRubiscoLimited(PhotosynthesisModelDummy):
         #return max(intercellular_CO2_concentration)
 
 
-class PhotosynthesisModelElectronTransportLimited(PhotosynthesisModelDummy):
+class PhotosynthesisModelElectronTransportLimitedBonan(PhotosynthesisModelDummy):
 
     _electron_transport_rate_model: ElectronTransportRateModel
     _CO2_compensation_point_model: TemperatureDependenceModel
