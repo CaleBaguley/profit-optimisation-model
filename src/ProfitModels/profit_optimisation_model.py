@@ -4,12 +4,12 @@
 -------------------------------------------------------------------------
 """
 
-from src.hydraulic_cost_model import HydraulicCostModel
+from src.ProfitModels.hydraulic_cost_model import HydraulicCostModel
 from src.leaf_air_coupling_model import LeafAirCouplingModel
-from src.CO2_gain_model import CO2GainModel
+from src.ProfitModels.CO2_gain_model import CO2GainModel
 
 from numpy import zeros, linspace
-from numpy import argmax, argwhere, nanargmax
+from numpy import argwhere, nanargmax
 
 
 class ProfitOptimisationModel:
