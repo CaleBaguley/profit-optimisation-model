@@ -1,3 +1,11 @@
+"""
+-------------------------------------------------------------------------
+Rubisco and electron transport limited photosynthesis models calculated
+using equations from "Modelling Stomatal Behaviour and Photosynthesis of
+Eucalyptus grandis" R. Leuning 1990.
+-------------------------------------------------------------------------
+"""
+
 import numpy as np
 from numpy import roots, nanmax
 
