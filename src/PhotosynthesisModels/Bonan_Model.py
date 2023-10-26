@@ -1,3 +1,11 @@
+"""
+-------------------------------------------------------------------------
+Rubisco and electron transport limited photosynthesis models calculated
+using equations from "Climate Change and terestrial Ecosystem Modeling"
+by Gordon Bonan
+-------------------------------------------------------------------------
+"""
+
 import numpy as np
 from numpy import roots, nanmax
 
