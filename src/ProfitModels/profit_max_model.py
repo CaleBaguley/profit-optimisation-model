@@ -50,7 +50,7 @@ class ProfitMaxModel(ProfitOptimisationModel):
         @return: profit
         @return: normalised CO2 gain
         @return: hydraulic cost
-        @return: maximum CO2 uptake: umol m-2 s-1
+        @return: CO2 uptake: umol m-2 s-1
         @return: transpiration: mmol m-2 s-1
         @return: leaf_water_potentials: kPa
         """
@@ -73,7 +73,7 @@ class ProfitMaxModel(ProfitOptimisationModel):
                                                          soil_water_potential)
 
         (CO2_gain,
-         maximum_CO2_uptake,
+         CO2_uptake,
          intercellular_CO2_as_a_function_of_leaf_water_potential,
          stomatal_conductance_to_CO2_as_a_function_of_leaf_water_potential) = \
             self._CO2_gain_model.CO2_gain(transpiration_as_a_function_of_leaf_water_potential,
@@ -87,7 +87,7 @@ class ProfitMaxModel(ProfitOptimisationModel):
         return (CO2_gain - hydraulic_costs,
                 CO2_gain,
                 hydraulic_costs,
-                maximum_CO2_uptake,
+                CO2_uptake,
                 transpiration_as_a_function_of_leaf_water_potential,
                 intercellular_CO2_as_a_function_of_leaf_water_potential,
                 stomatal_conductance_to_CO2_as_a_function_of_leaf_water_potential,

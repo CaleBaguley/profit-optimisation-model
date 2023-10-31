@@ -71,7 +71,7 @@ class ProfitOptimisationModel:
 
         (profit, CO2_gain,
          hydraulic_costs,
-         maximum_net_CO2_uptake,
+         net_CO2_uptake_as_a_function_of_leaf_water_potential,
          transpiration_as_a_function_of_leaf_water_potential,
          intercellular_CO2_as_a_function_of_leaf_water_potential,
          stomatal_conductance_to_CO2_as_a_function_of_leaf_water_potential,
@@ -96,7 +96,7 @@ class ProfitOptimisationModel:
         maximum_profit_id_old = nanargmax(profit)
 
         optimal_leaf_water_potential = leaf_water_potentials[maximum_profit_id]
-        net_CO2_uptake = maximum_net_CO2_uptake * CO2_gain[maximum_profit_id]
+        net_CO2_uptake = net_CO2_uptake_as_a_function_of_leaf_water_potential[maximum_profit_id]
         transpiration_rate = transpiration_as_a_function_of_leaf_water_potential[maximum_profit_id]
         intercellular_CO2 = intercellular_CO2_as_a_function_of_leaf_water_potential[maximum_profit_id]
         stomatal_conductance_to_CO2 = \
