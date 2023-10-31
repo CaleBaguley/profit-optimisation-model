@@ -44,5 +44,7 @@ class SOXHydraulicConductanceModel(HydraulicConductanceModel):
         @return: (MPa)
         """
 
-        return self._water_potential_at_half_conductance * power(conductivity_loss_fraction - 1,
+        conductance_fraction = 1 - conductivity_loss_fraction
+
+        return self._water_potential_at_half_conductance * power(1/conductance_fraction - 1,
                                                                  1/self._shape_parameter)
