@@ -4,13 +4,13 @@
 -----------------------------------------------------------------------------------------
 """
 
+from src.HydraulicConductanceModels.hydraulic_conductance_model import HydraulicConductanceModel
 from numpy import exp, power, log, abs
 from numpy import linspace, trapz
 
 
-class CumulativeWeibullDistribution:
+class CumulativeWeibullDistribution(HydraulicConductanceModel):
 
-    _maximum_conductance: float
     _sensitivity_parameter: float
     _shape_parameter: float
 
@@ -23,7 +23,7 @@ class CumulativeWeibullDistribution:
         @param shape_parameter: (unitless)
         """
 
-        self._maximum_conductance = maximum_conductance
+        super().__init__(maximum_conductance)
         self._sensitivity_parameter = sensitivity_parameter
         self._shape_parameter = shape_parameter
 
@@ -62,28 +62,6 @@ class CumulativeWeibullDistribution:
 
         return self.water_potential_from_conductivity_loss_fraction(conductivity_loss_fraction)
 
-    def transpiration(self, min_water_potential, max_water_potential, steps = 100):
-        """
-        Calculates the transpiration rate across the water potentials using the trapezium integral approximation
-        @param min_water_potential: (MPa)
-        @param max_water_potential: (MPa)
-        @param steps: number of steps for integral approximation (unitless)
-        @return: (mmol m-2 s-1)
-        """
-
-        water_potential_values = linspace(min_water_potential, max_water_potential, steps)
-
-        conductance_values = self.conductance(water_potential_values)
-
-        return trapz(conductance_values, water_potential_values)
-
-    @property
-    def maximum_conductance(self):
-        """
-        @return: (mmol m-2 s-1 MPa-1)
-        """
-        return self._maximum_conductance
-
     @property
     def sensitivity_parameter(self):
         """
@@ -99,7 +77,7 @@ class CumulativeWeibullDistribution:
         return self._shape_parameter
 
 
-def cumulative_Weibull_distribution(water_potential, maximum_conductance, sensitivity_parameter, shape_parameter):
+def cumulative_Weibull_distribution(water_potentials, maximum_conductance, sensitivity_parameter, shape_parameter):
 
     """
 
@@ -110,11 +88,12 @@ def cumulative_Weibull_distribution(water_potential, maximum_conductance, sensit
     @return: (MPa)
     """
 
-    exponent = - power(water_potential / sensitivity_parameter, shape_parameter)
+    exponent = - power(water_potentials / sensitivity_parameter, shape_parameter)
 
     return maximum_conductance * exp(exponent)
 
-def cumulative_weibull_distribution_from_conductance_loss_at_given_water_potentials(maximum_conductance,
+
+def cumulative_Weibull_distribution_from_conductance_loss_at_given_water_potentials(maximum_conductance,
                                                                                     water_potential_1,
                                                                                     water_potential_2,
                                                                                     conductance_loss_fraction_1,

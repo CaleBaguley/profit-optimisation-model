@@ -5,14 +5,14 @@
 """
 
 from src.ProfitModels.HydraulicCostModels.hydraulic_cost_model import HydraulicCostModel
-from src.HudraulicConductanceModels.cumulative_Weibull_distribution_model import CumulativeWeibullDistribution
+from src.HydraulicConductanceModels.hydraulic_conductance_model import HydraulicConductanceModel
 
 
 class ProfitMaxHydraulicCostModel(HydraulicCostModel):
     _curvature_parameter: float
 
     def __init__(self,
-                 hydraulic_conductance_model: CumulativeWeibullDistribution,
+                 hydraulic_conductance_model: HydraulicConductanceModel,
                  critical_leaf_water_potential: float,
                  curvature_parameter: float):
 

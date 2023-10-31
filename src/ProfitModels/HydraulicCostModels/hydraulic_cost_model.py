@@ -4,17 +4,17 @@
 --------------------------------------------------------------------------------
 """
 
-from src.HudraulicConductanceModels.cumulative_Weibull_distribution_model import CumulativeWeibullDistribution
+from src.HydraulicConductanceModels.hydraulic_conductance_model import HydraulicConductanceModel
 
 
 class HydraulicCostModel:
 
-    _hydraulic_conductance_model: CumulativeWeibullDistribution
+    _hydraulic_conductance_model: HydraulicConductanceModel
     _critical_leaf_water_potential: float
     _critical_hydraulic_conductance: float
 
     def __init__(self,
-                 hydraulic_conductance_model: CumulativeWeibullDistribution,
+                 hydraulic_conductance_model: HydraulicConductanceModel,
                  critical_leaf_water_potential: float):
 
         """
