@@ -4,14 +4,27 @@
 -------------------------------------------------------------------------
 """
 
-from numpy import zeros
+from src.ProfitModels.HydraulicCostModels.hydraulic_cost_model import HydraulicCostModel
+from src.leaf_air_coupling_model import LeafAirCouplingModel
+from src.ProfitModels.CO2GainModels.CO2_gain_model import CO2GainModelDummy
+from numpy import zeros, linspace
 from numpy import argwhere, nanargmax
 
 
 class ProfitOptimisationModel:
+    _hydraulic_cost_model: HydraulicCostModel
+    _leaf_air_coupling_model: LeafAirCouplingModel
+    _CO2_gain_model: CO2GainModelDummy
 
-    def __init__(self):
-        pass
+    def __init__(self,
+                 hydraulic_cost_model,
+                 leaf_air_coupling_model,
+                 CO2_gain_model):
+
+        super().__init__()
+        self._hydraulic_cost_model = hydraulic_cost_model
+        self._leaf_air_coupling_model = leaf_air_coupling_model
+        self._CO2_gain_model = CO2_gain_model
 
     def profit_as_a_function_of_leaf_water_potential(self,
                                                      soil_water_potential,
@@ -41,8 +54,48 @@ class ProfitOptimisationModel:
         @return: leaf_water_potentials: kPa
         """
 
-        raise Exception("profit_as_a_function_of_leaf_water_potential method not implemented in"
-                        " ProfitOptimisationModel class")
+        critical_leaf_water_potential = self._hydraulic_cost_model.critical_leaf_water_potential
+
+        leaf_water_potentials = linspace(soil_water_potential,
+                                         critical_leaf_water_potential,
+                                         num=number_of_sample_points)
+
+        hydraulic_costs = \
+            self._hydraulic_cost_model.hydraulic_cost_as_a_function_of_leaf_water_potential(leaf_water_potentials,
+                                                                                            soil_water_potential)
+
+        transpiration_as_a_function_of_leaf_water_potential = zeros(len(leaf_water_potentials))
+
+        for i in range(len(leaf_water_potentials)):
+            transpiration_as_a_function_of_leaf_water_potential[i] = \
+                self._hydraulic_cost_model.transpiration(leaf_water_potentials[i],
+                                                         soil_water_potential)
+
+        (CO2_gain,
+         CO2_uptake,
+         intercellular_CO2_as_a_function_of_leaf_water_potential,
+         stomatal_conductance_to_CO2_as_a_function_of_leaf_water_potential) = \
+            self._CO2_gain_model.CO2_gain(transpiration_as_a_function_of_leaf_water_potential,
+                                          air_temperature,
+                                          air_vapour_pressure_deficit,
+                                          air_pressure,
+                                          atmospheric_CO2_concentration,
+                                          intercellular_oxygen,
+                                          photosynthetically_active_radiation)
+
+        profit = self.profit(CO2_gain, hydraulic_costs)
+
+        return (profit,
+                CO2_gain,
+                hydraulic_costs,
+                CO2_uptake,
+                transpiration_as_a_function_of_leaf_water_potential,
+                intercellular_CO2_as_a_function_of_leaf_water_potential,
+                stomatal_conductance_to_CO2_as_a_function_of_leaf_water_potential,
+                leaf_water_potentials)
+
+    def profit(self, CO2_gain, hydraulic_cost):
+        raise Exception("profit method not implemented in ProfitOptimisation base class.")
 
     def optimal_state(self,
                       soil_water_potential,
@@ -69,7 +122,8 @@ class ProfitOptimisationModel:
         @return: transpiration: mmol m-2 s-1
         """
 
-        (profit, CO2_gain,
+        (profit,
+         CO2_gain,
          hydraulic_costs,
          net_CO2_uptake_as_a_function_of_leaf_water_potential,
          transpiration_as_a_function_of_leaf_water_potential,
