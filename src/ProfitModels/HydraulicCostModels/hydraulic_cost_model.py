@@ -4,7 +4,7 @@
 --------------------------------------------------------------------------------
 """
 
-from src.cumulative_Weibull_distribution_model import CumulativeWeibullDistribution
+from src.HudraulicConductanceModels.cumulative_Weibull_distribution_model import CumulativeWeibullDistribution
 
 
 class HydraulicCostModel:
@@ -48,13 +48,7 @@ class HydraulicCostModel:
         @return: hydraulic cost (unitless)
         """
 
-        hydraulic_conductance = self.hydraulic_conductance(leaf_water_potential)
-
-        instantaneous_maximum_hydraulic_conductance = \
-            self.instantaneous_maximum_hydraulic_conductance(soil_water_potential)
-
-        return ((instantaneous_maximum_hydraulic_conductance - hydraulic_conductance)
-                / (instantaneous_maximum_hydraulic_conductance - self._critical_hydraulic_conductance))
+        raise Exception("hydraulic_cost method not implemented in base class.")
 
     def hydraulic_conductance(self, water_potential):
 
