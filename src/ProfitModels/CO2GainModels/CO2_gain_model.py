@@ -10,7 +10,7 @@ from src.PhotosynthesisModels.photosynthesis_model import PhotosynthesisModelDum
 from src.conversions import magnitude_conversion
 
 
-class CO2GainModel:
+class CO2GainModelDummy:
     _leaf_air_coupling_model: LeafAirCouplingModel
     _photosynthesis_model: PhotosynthesisModelDummy
 
@@ -74,9 +74,4 @@ class CO2GainModel:
                 stomatal_conductance_to_CO2_as_a_function_of_leaf_water_potential)
 
     def gain_equation(self, net_CO2_uptake):
-        maximum_CO2_uptake = nanmax(net_CO2_uptake)
-
-        if(maximum_CO2_uptake > 0.):
-            return net_CO2_uptake/maximum_CO2_uptake
-
-        return zeros(len(net_CO2_uptake))
+        raise Exception("gain equation not implemented in dummy class.")
