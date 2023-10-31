@@ -66,17 +66,17 @@ class CO2GainModel:
 
             stomatal_conductance_to_CO2_as_a_function_of_leaf_water_potential[i] = stomatal_conductance_to_CO2
 
-        maximum_CO2_uptake = nanmax(net_CO2_uptake)
-
-        #print("max CO2 uptake: ",maximum_CO2_uptake)
-
-        if(maximum_CO2_uptake > 0.):
-            CO2_gain = net_CO2_uptake / maximum_CO2_uptake
-
-        else:
-            CO2_gain = zeros(len(net_CO2_uptake))
+        CO2_gain = self.gain_equation(net_CO2_uptake)
 
         return (CO2_gain,
-                maximum_CO2_uptake,
+                net_CO2_uptake,
                 intercellular_CO2_as_a_function_of_leaf_water_potential,
                 stomatal_conductance_to_CO2_as_a_function_of_leaf_water_potential)
+
+    def gain_equation(self, net_CO2_uptake):
+        maximum_CO2_uptake = nanmax(net_CO2_uptake)
+
+        if(maximum_CO2_uptake > 0.):
+            return net_CO2_uptake/maximum_CO2_uptake
+
+        return zeros(len(net_CO2_uptake))
