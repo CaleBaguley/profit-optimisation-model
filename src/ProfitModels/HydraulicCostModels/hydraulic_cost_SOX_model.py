@@ -20,4 +20,4 @@ class SOXHydraulicCostModel(HydraulicCostModel):
 
         hydraulic_conductance = self.hydraulic_conductance(leaf_water_potential)
 
-        return hydraulic_conductance / self.hydraulic_conductance_model.maximum_conductance
+        return 1 - hydraulic_conductance / self.hydraulic_conductance_model.maximum_conductance

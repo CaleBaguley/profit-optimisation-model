@@ -15,4 +15,4 @@ from numpy import zeros, linspace
 class SOXModel(ProfitOptimisationModel):
 
     def profit(self, CO2_gain, hydraulic_cost):
-        return CO2_gain * hydraulic_cost
+        return CO2_gain * (1 - hydraulic_cost)
