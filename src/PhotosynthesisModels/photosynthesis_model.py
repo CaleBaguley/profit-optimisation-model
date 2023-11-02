@@ -54,8 +54,6 @@ class PhotosynthesisModelDummy:
             intercellular_O,
             utilized_photosynthetically_active_radiation)
 
-        #print("net CO2: ", (atmospheric_CO2_concentration - intercellular_CO2_concentration) * stomatal_conductance_to_CO2)
-
         return ((atmospheric_CO2_concentration - intercellular_CO2_concentration) * stomatal_conductance_to_CO2,
                 intercellular_CO2_concentration)
 
@@ -92,9 +90,6 @@ class PhotosynthesisModel(PhotosynthesisModelDummy):
                                               leaf_temperature,
                                               intercellular_O,
                                               utilized_photosynthetically_active_radiation))
-
-        #print("Rubisco limited: ", intercellular_CO2_rubisco_limited)
-        #print("electron limited: ", intercellular_CO2_electron_transport_limited)
 
         if((intercellular_CO2_electron_transport_limited is None) & (intercellular_CO2_rubisco_limited is None)):
             return 0.

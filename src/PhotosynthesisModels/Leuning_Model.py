@@ -60,14 +60,6 @@ class PhotosynthesisModelRubiscoLimitedLeuning(PhotosynthesisModelDummy):
 
         CO2_compensation_point = self._CO2_compensation_point_model.get_value_at_temperature(leaf_temperature)
 
-        #print('\nRubisco limited:')
-        #print('stomatal conductance to CO2: ', stomatal_conductance_to_CO2)
-        #print('atmospheric CO2 concentration: ', atmospheric_CO2_concentration)
-        #print('mitochondrial respiration rate: ', mitochondrial_respiration_rate)
-        #print('michaelis menten constant carboxylation: ', michaelis_menten_constant_carboxylation)
-        #print('maximum carboxylation rate: ', maximum_carboxylation_rate)
-        #print('CO2 compensation point: ', CO2_compensation_point)
-
         # Quadratic equation components (Ax^2 + Bx + C = 0)
         A = -stomatal_conductance_to_CO2
 
@@ -82,9 +74,6 @@ class PhotosynthesisModelRubiscoLimitedLeuning(PhotosynthesisModelDummy):
         # Find the roots of the quadratic equation
         intercellular_CO2_concentration = roots([A, B, C])
 
-        #print("roots: ", intercellular_CO2_concentration)
-        #print("Manon roots: ", [quadratic(a=A, b=B, c=C, large=True), quadratic(a=A, b=B, c=C, large=False)])
-
         intercellular_CO2_concentration = nanmax(intercellular_CO2_concentration)
 
         if(intercellular_CO2_concentration is None):
@@ -93,7 +82,6 @@ class PhotosynthesisModelRubiscoLimitedLeuning(PhotosynthesisModelDummy):
             return np.nan
 
         return intercellular_CO2_concentration
-        #return max(intercellular_CO2_concentration)
 
 
 class PhotosynthesisModelElectronTransportLimitedLeuning(PhotosynthesisModelDummy):
@@ -137,7 +125,6 @@ class PhotosynthesisModelElectronTransportLimitedLeuning(PhotosynthesisModelDumm
         @param utilized_photosynthetically_active_radiation: (umol m-2 unit time-1)
         @return: intercellular CO2 concentration (umol mol-1)
         """
-        #print('\nElectron transport rate limited:')
 
         if(utilized_photosynthetically_active_radiation == 0.):
             return atmospheric_CO2_concentration
@@ -146,22 +133,11 @@ class PhotosynthesisModelElectronTransportLimitedLeuning(PhotosynthesisModelDumm
 
         mitochondrial_respiration_rate = 0.015 * maximum_carboxylation_rate
 
-        #mitochondrial_respiration_rate = (
-        #    self._mitochondrial_respiration_rate_model.get_value_at_temperature(leaf_temperature))
-
         electron_transport_rate = (
             self._electron_transport_rate_model.electron_transport_rate(leaf_temperature,
                                                                         utilized_photosynthetically_active_radiation))
 
         CO2_compensation_point = self._CO2_compensation_point_model.get_value_at_temperature(leaf_temperature)
-
-
-        #print('stomatal conductance to CO2: ', stomatal_conductance_to_CO2)
-        #print('atmospheric CO2 concentration: ', atmospheric_CO2_concentration)
-        #print('mitochondrial respiration rate: ', mitochondrial_respiration_rate)
-        #print('maximum carboxylation rate: ', maximum_carboxylation_rate)
-        #print('electron transport rate: ', electron_transport_rate)
-        #print('CO2 compensation point: ', CO2_compensation_point)
 
         # Quadratic equation components (Ax^2 + Bx + C = 0)
         A = -stomatal_conductance_to_CO2
@@ -177,9 +153,6 @@ class PhotosynthesisModelElectronTransportLimitedLeuning(PhotosynthesisModelDumm
         # Find the roots of the quadratic equation
         intercellular_CO2_concentration = roots([A, B, C])
 
-        #print("roots: ", intercellular_CO2_concentration)
-        #print("Manon roots: ", [quadratic(a=A, b=B, c=C, large=True), quadratic(a=A, b=B, c=C, large=False)])
-
         intercellular_CO2_concentration = nanmax(intercellular_CO2_concentration)
 
         if (intercellular_CO2_concentration is None):
@@ -188,4 +161,3 @@ class PhotosynthesisModelElectronTransportLimitedLeuning(PhotosynthesisModelDumm
             return np.nan
 
         return intercellular_CO2_concentration
-        #return max(intercellular_CO2_concentration)

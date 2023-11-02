@@ -38,8 +38,6 @@ class RubiscoRates:
             michaelis_menten_constant_O_model = ArrheniusModel(rate_at_25_centigrade=278.4, activation_energy=36380.0)
         self._michaelis_menten_constant_O_model = michaelis_menten_constant_O_model
 
-        print(self._michaelis_menten_constant_O_model)
-
     def michaelis_menten_constant_carboxylation(self, leaf_temperature, inter_cellular_oxygen):
         """
         Calculates the Michaelis-Menten constant for carboxylation by Rubisco.
