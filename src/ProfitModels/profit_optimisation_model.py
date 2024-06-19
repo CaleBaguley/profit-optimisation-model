@@ -240,13 +240,17 @@ class ProfitOptimisationModel:
         intercellular_CO2_values = zeros(len(time_steps))
         stomatal_conductance_to_CO2_values = zeros(len(time_steps))
 
+        # Calculate time step size
+        step_size = time_steps[1] - time_steps[0]
+
         for i in range(len(time_steps)):
             (optimal_leaf_water_potentials[i],
              net_CO2_uptake_values[i],
              transpiration_rate_values[i],
              intercellular_CO2_values[i],
              stomatal_conductance_to_CO2_values[i]) = \
-                self.calculate_time_step(soil_water_potential_values[i],
+                self.calculate_time_step(step_size,
+                                         soil_water_potential_values[i],
                                          air_temperature_values[i],
                                          air_vapour_pressure_deficit_values[i],
                                          air_pressure_values[i],
