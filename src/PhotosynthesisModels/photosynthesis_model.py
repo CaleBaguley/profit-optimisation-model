@@ -44,7 +44,9 @@ class PhotosynthesisModelDummy:
         @param leaf_temperature: K
         @param intercellular_O: umol mol-1
         @param utilized_photosynthetically_active_radiation: (umol m-2 unit time-1)
+
         @return: net rate of CO2 assimilation umol m-2 s-1
+        @return: intercellular CO2 concentration umol mol-1
         """
 
         intercellular_CO2_concentration = self.intercellular_CO2_concentration(

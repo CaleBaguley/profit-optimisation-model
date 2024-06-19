@@ -40,6 +40,8 @@ class CO2GainModelDummy:
 
         @return: normalised CO2 gain
         @return: maximum CO2 gain: umol m-2 s-1
+        @return: intercellular CO2 concentration: umol mol-1
+        @return: stomatal conductance to CO2: mol m-2 s-1
         """
 
         net_CO2_uptake = zeros(len(transpiration_rates))
