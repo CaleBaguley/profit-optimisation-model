@@ -12,16 +12,21 @@ class SOXHydraulicConductanceModel(HydraulicConductanceModel):
     _water_potential_at_half_conductance: float
     _shape_parameter: float
 
-    def __init__(self, maximum_conductance: float, water_potential_at_half_conductance: float, shape_parameter: float):
+    def __init__(self,
+                 maximum_conductance: float,
+                 water_potential_at_half_conductance: float,
+                 shape_parameter: float,
+                 critical_conductance_loss_fraction: float = 0.9):
 
         """
 
         @param maximum_conductance: (mmol m-2 s-1 MPa-1)
         @param water_potential_at_half_conductance: (MPa)
         @param shape_parameter: (unitless)
+        @param critical_conductance_loss_fraction: (unitless)
         """
 
-        super().__init__(maximum_conductance)
+        super().__init__(maximum_conductance, critical_conductance_loss_fraction)
         self._water_potential_at_half_conductance = water_potential_at_half_conductance
         self._shape_parameter = shape_parameter
 

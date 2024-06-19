@@ -14,16 +14,21 @@ class CumulativeWeibullDistribution(HydraulicConductanceModel):
     _sensitivity_parameter: float
     _shape_parameter: float
 
-    def __init__(self, maximum_conductance: float, sensitivity_parameter: float, shape_parameter: float):
+    def __init__(self,
+                 maximum_conductance: float,
+                 sensitivity_parameter: float,
+                 shape_parameter: float,
+                 critical_conductance_loss_fraction: float = 0.9):
 
         """
 
         @param maximum_conductance: (mmol m-2 s-1 MPa-1)
         @param sensitivity_parameter: (MPa)
         @param shape_parameter: (unitless)
+        @param critical_conductance_loss_fraction: (unitless)
         """
 
-        super().__init__(maximum_conductance)
+        super().__init__(maximum_conductance, critical_conductance_loss_fraction)
         self._sensitivity_parameter = sensitivity_parameter
         self._shape_parameter = shape_parameter
 
