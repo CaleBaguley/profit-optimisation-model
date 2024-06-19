@@ -51,6 +51,8 @@ class ProfitOptimisationModel:
         @return: hydraulic cost
         @return: maximum CO2 uptake: umol m-2 s-1
         @return: transpiration: mmol m-2 s-1
+        @return: intercellular CO2 concentration: umol mol-1
+        @return: stomatal conductance to CO2: mol m-2 s-1
         @return: leaf_water_potentials: kPa
         """
 
@@ -120,6 +122,8 @@ class ProfitOptimisationModel:
         @return: optimal leaf water potential(MPa)
         @return: net CO2 uptake: umol m-2 s-1
         @return: transpiration: mmol m-2 s-1
+        @return: intercellular CO2 concentration: umol mol-1
+        @return: stomatal conductance to CO2: mol m-2 s-1
         """
 
         (profit,
@@ -162,59 +166,98 @@ class ProfitOptimisationModel:
                 intercellular_CO2,
                 stomatal_conductance_to_CO2)
 
+    def calculate_time_step(self,
+                            step_size,
+                            soil_water_potential,
+                            air_temperature,
+                            air_vapour_pressure_deficit,
+                            air_pressure,
+                            atmospheric_CO2_concentration,
+                            intercellular_oxygen,
+                            photosynthetically_active_radiation,
+                            number_of_sample_points=1000):
+        """
+        Method to calculate plant properties for a single time step.
 
-def run_optimisation_model_on_data(profit_optimisation_model: ProfitOptimisationModel,
-                                   time_steps,
-                                   soil_water_potential_values,
-                                   air_temperature_values,
-                                   air_vapour_pressure_deficit_values,
-                                   air_pressure_values,
-                                   atmospheric_CO2_concentration_values,
-                                   intercellular_oxygen_values,
-                                   photosynthetically_active_radiation_values,
-                                   number_of_leaf_water_potential_sample_points=1000):
-    """
+        @param step_size: s, float
+        @param soil_water_potential: MPa, float
+        @param air_temperature: k, float
+        @param air_vapour_pressure_deficit: kPa, float
+        @param air_pressure: kPa, float
+        @param atmospheric_CO2_concentration: umol mol-1, float
+        @param intercellular_oxygen: umol mol-1, float
+        @param photosynthetically_active_radiation: umol m-2 s-1 float
+        @param number_of_sample_points: int
 
-    @param profit_optimisation_model:
-    @param time_steps:
-    @param soil_water_potential_values: MPa
-    @param air_temperature_values: K
-    @param air_vapour_pressure_deficit_values: kPa
-    @param air_pressure_values: kPa
-    @param atmospheric_CO2_concentration_values: umol mol-1
-    @param intercellular_oxygen_values: umol mol-1
-    @param photosynthetically_active_radiation_values: umol m-2 s-1
-    @param number_of_leaf_water_potential_sample_points:
+        @return: leaf_water_potential: MPa, float
+        @return: net_CO2_uptake: umol m-2 s-1, float
+        @return: transpiration_rate: mmol m-2 s-1 float
+        @return: intercellular_CO2: umol mol-1,  float
+        @return: stomatal_conductance_to_CO2: mol m-2 s-1 float
+        """
 
-    @return: optimal leaf water potentials: MPa
-    @return: net CO2 uptake values: umol m-2 s-1
-    @return: transpiration rates: mmol m-2 s-1
-    """
+        return self.optimal_state(soil_water_potential,
+                                  air_temperature,
+                                  air_vapour_pressure_deficit,
+                                  air_pressure,
+                                  atmospheric_CO2_concentration,
+                                  intercellular_oxygen,
+                                  photosynthetically_active_radiation,
+                                  number_of_sample_points)
 
-    # Setup output arrays
-    optimal_leaf_water_potentials = zeros(len(time_steps))
-    net_CO2_uptake_values = zeros(len(time_steps))
-    transpiration_rate_values = zeros(len(time_steps))
-    intercellular_CO2_values = zeros(len(time_steps))
-    stomatal_conductance_to_CO2_values = zeros(len(time_steps))
+    def run_model(self,
+                  time_steps,
+                  soil_water_potential_values,
+                  air_temperature_values,
+                  air_vapour_pressure_deficit_values,
+                  air_pressure_values,
+                  atmospheric_CO2_concentration_values,
+                  intercellular_oxygen_values,
+                  photosynthetically_active_radiation_values,
+                  number_of_leaf_water_potential_sample_points=1000):
 
-    for i in range(len(time_steps)):
-        (optimal_leaf_water_potentials[i],
-         net_CO2_uptake_values[i],
-         transpiration_rate_values[i],
-         intercellular_CO2_values[i],
-         stomatal_conductance_to_CO2_values[i]) = \
-            profit_optimisation_model.optimal_state(soil_water_potential_values[i],
-                                                    air_temperature_values[i],
-                                                    air_vapour_pressure_deficit_values[i],
-                                                    air_pressure_values[i],
-                                                    atmospheric_CO2_concentration_values[i],
-                                                    intercellular_oxygen_values[i],
-                                                    photosynthetically_active_radiation_values[i],
-                                                    number_of_leaf_water_potential_sample_points)
+        """
+        Method used to run the model on a set of time series data.
+        @param time_steps:
+        @param soil_water_potential_values: MPa
+        @param air_temperature_values: K
+        @param air_vapour_pressure_deficit_values: kPa
+        @param air_pressure_values: kPa
+        @param atmospheric_CO2_concentration_values: umol mol-1
+        @param intercellular_oxygen_values: umol mol-1
+        @param photosynthetically_active_radiation_values: umol m-2 s-1
+        @param number_of_leaf_water_potential_sample_points:
 
-    return (optimal_leaf_water_potentials,
-            net_CO2_uptake_values,
-            transpiration_rate_values,
-            intercellular_CO2_values,
-            stomatal_conductance_to_CO2_values)
+        @return: optimal leaf water potentials: MPa
+        @return: net CO2 uptake values: umol m-2 s-1
+        @return: transpiration rates: mmol m-2 s-1
+        """
+
+        # Setup output arrays
+        optimal_leaf_water_potentials = zeros(len(time_steps))
+        net_CO2_uptake_values = zeros(len(time_steps))
+        transpiration_rate_values = zeros(len(time_steps))
+        intercellular_CO2_values = zeros(len(time_steps))
+        stomatal_conductance_to_CO2_values = zeros(len(time_steps))
+
+        for i in range(len(time_steps)):
+            (optimal_leaf_water_potentials[i],
+             net_CO2_uptake_values[i],
+             transpiration_rate_values[i],
+             intercellular_CO2_values[i],
+             stomatal_conductance_to_CO2_values[i]) = \
+                self.calculate_time_step(soil_water_potential_values[i],
+                                         air_temperature_values[i],
+                                         air_vapour_pressure_deficit_values[i],
+                                         air_pressure_values[i],
+                                         atmospheric_CO2_concentration_values[i],
+                                         intercellular_oxygen_values[i],
+                                         photosynthetically_active_radiation_values[i],
+                                         number_of_leaf_water_potential_sample_points)
+
+        return (optimal_leaf_water_potentials,
+                net_CO2_uptake_values,
+                transpiration_rate_values,
+                intercellular_CO2_values,
+                stomatal_conductance_to_CO2_values)
+
