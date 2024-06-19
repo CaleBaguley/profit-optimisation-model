@@ -11,15 +11,18 @@ from numpy import linspace, trapz
 class HydraulicConductanceModel:
 
     _maximum_conductance: float
+    _critical_conductance_loss_fraction: float
 
-    def __init__(self, maximum_conductance: float):
+    def __init__(self, maximum_conductance: float, critical_conductance_loss_fraction: float = 0.9):
 
         """
 
         @param maximum_conductance: (mmol m-2 s-1 MPa-1)
+        @param critical_conductance_loss_fraction: (unitless)
         """
 
         self._maximum_conductance = maximum_conductance
+        self._critical_conductance_loss_fraction = critical_conductance_loss_fraction
 
     def conductance(self, water_potential):
 
@@ -72,3 +75,24 @@ class HydraulicConductanceModel:
         @return: (mmol m-2 s-1 MPa-1)
         """
         return self._maximum_conductance
+
+    @property
+    def critical_conductance_loss_fraction(self):
+        """
+        @return: (unitless)
+        """
+        return self._critical_conductance_loss_fraction
+
+    @property
+    def critical_conductance(self):
+        """
+        @return: (mmol m-2 s-1 MPa-1)
+        """
+        return self.maximum_conductance * self.critical_conductance_loss_fraction
+
+    @property
+    def critical_water_potential(self):
+        """
+        @return: (MPa)
+        """
+        return self.water_potential_from_conductivity_loss_fraction(self.critical_conductance_loss_fraction)
