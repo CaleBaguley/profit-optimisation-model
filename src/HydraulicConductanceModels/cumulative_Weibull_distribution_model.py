@@ -18,7 +18,8 @@ class CumulativeWeibullDistribution(HydraulicConductanceModel):
                  maximum_conductance: float,
                  sensitivity_parameter: float,
                  shape_parameter: float,
-                 critical_conductance_loss_fraction: float = 0.9):
+                 critical_conductance_loss_fraction: float = 0.9,
+                 xylem_recovery_water_potnetial: float = 0.):
 
         """
 
@@ -26,9 +27,10 @@ class CumulativeWeibullDistribution(HydraulicConductanceModel):
         @param sensitivity_parameter: (MPa)
         @param shape_parameter: (unitless)
         @param critical_conductance_loss_fraction: (unitless)
+        @param xylem_recovery_water_potnetial: (MPa)
         """
 
-        super().__init__(maximum_conductance, critical_conductance_loss_fraction)
+        super().__init__(maximum_conductance, critical_conductance_loss_fraction, xylem_recovery_water_potnetial)
         self._sensitivity_parameter = sensitivity_parameter
         self._shape_parameter = shape_parameter
 
