@@ -81,6 +81,15 @@ class HydraulicCostModel:
         """
         return self._hydraulic_conductance_model.transpiration(min_water_potential, max_water_potential, steps)
 
+    def update_xylem_damage(self, water_potential, timestep, transpiration_rate):
+        """
+        @param water_potential:
+        @param timestep:
+        @param transpiration_rate:
+        @return: bool indicting if the conductance model has changed
+        """
+        return self._hydraulic_conductance_model.update_xylem_damage(water_potential, timestep, transpiration_rate)
+
     @property
     def hydraulic_conductance_model(self):
         return self._hydraulic_conductance_model
