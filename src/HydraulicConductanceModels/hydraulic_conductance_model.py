@@ -13,11 +13,13 @@ class HydraulicConductanceModel:
     _maximum_conductance: float
     _critical_conductance_loss_fraction: float
     _xylem_recovery_water_potnetial: float
+    _PLC_damage_threshold: float
 
     def __init__(self,
                  maximum_conductance: float,
                  critical_conductance_loss_fraction: float = 0.9,
-                 xylem_recovery_water_potnetial: float = 0.):
+                 xylem_recovery_water_potnetial: float = 0.,
+                 PLC_damage_threshold: float = 0.1):
 
         """
 
@@ -28,6 +30,7 @@ class HydraulicConductanceModel:
         self._maximum_conductance = maximum_conductance
         self._critical_conductance_loss_fraction = critical_conductance_loss_fraction
         self._xylem_recovery_water_potnetial = xylem_recovery_water_potnetial
+        self._PLC_damage_threshold = PLC_damage_threshold
 
     def conductance(self, water_potential):
 
@@ -85,7 +88,10 @@ class HydraulicConductanceModel:
         if water_potential >= self._xylem_recovery_water_potnetial:
             return self._recover_xylem(water_potential, timestep)
 
-        return self._damage_xylem(water_potential, timestep, transpiration_rate)
+        elif water_potential <= self.critical_water_potential * (1 - self._PLC_damage_threshold):
+            return self._damage_xylem(water_potential, timestep, transpiration_rate)
+
+        return False
 
     def _damage_xylem(self, water_potential, timestep, transpiration_rate):
         """
@@ -138,3 +144,10 @@ class HydraulicConductanceModel:
         @return: (MPa)
         """
         return self._xylem_recovery_water_potnetial
+
+    @property
+    def PLC_damage_threshold(self):
+        """
+        @return: (unitless)
+        """
+        return self._PLC_damage_threshold
