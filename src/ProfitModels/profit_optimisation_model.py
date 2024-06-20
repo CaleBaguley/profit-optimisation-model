@@ -196,14 +196,18 @@ class ProfitOptimisationModel:
         @return: stomatal_conductance_to_CO2: mol m-2 s-1 float
         """
 
-        return self.optimal_state(soil_water_potential,
-                                  air_temperature,
-                                  air_vapour_pressure_deficit,
-                                  air_pressure,
-                                  atmospheric_CO2_concentration,
-                                  intercellular_oxygen,
-                                  photosynthetically_active_radiation,
-                                  number_of_sample_points)
+        output = self.optimal_state(soil_water_potential,
+                                    air_temperature,
+                                    air_vapour_pressure_deficit,
+                                    air_pressure,
+                                    atmospheric_CO2_concentration,
+                                    intercellular_oxygen,
+                                    photosynthetically_active_radiation,
+                                    number_of_sample_points)
+
+        self._hydraulic_cost_model.update_xylem_damage(output[0], step_size, output[2])
+
+        return output
 
     def run_model(self,
                   time_steps,
