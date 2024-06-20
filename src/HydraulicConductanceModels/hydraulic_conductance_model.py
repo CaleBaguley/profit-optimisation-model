@@ -131,3 +131,10 @@ class HydraulicConductanceModel:
         @return: (MPa)
         """
         return self.water_potential_from_conductivity_loss_fraction(self.critical_conductance_loss_fraction)
+    
+    @property
+    def xylem_recovery_water_potnetial(self):
+        """
+        @return: (MPa)
+        """
+        return self._xylem_recovery_water_potnetial
