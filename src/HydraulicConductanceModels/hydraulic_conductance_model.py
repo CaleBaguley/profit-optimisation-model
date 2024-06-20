@@ -12,8 +12,12 @@ class HydraulicConductanceModel:
 
     _maximum_conductance: float
     _critical_conductance_loss_fraction: float
+    _xylem_recovery_water_potnetial: float
 
-    def __init__(self, maximum_conductance: float, critical_conductance_loss_fraction: float = 0.9):
+    def __init__(self,
+                 maximum_conductance: float,
+                 critical_conductance_loss_fraction: float = 0.9,
+                 xylem_recovery_water_potnetial: float = 0.):
 
         """
 
@@ -23,6 +27,7 @@ class HydraulicConductanceModel:
 
         self._maximum_conductance = maximum_conductance
         self._critical_conductance_loss_fraction = critical_conductance_loss_fraction
+        self._xylem_recovery_water_potnetial = xylem_recovery_water_potnetial
 
     def conductance(self, water_potential):
 
@@ -68,6 +73,36 @@ class HydraulicConductanceModel:
         conductance_values = self.conductance(water_potential_values)
 
         return trapz(conductance_values, water_potential_values)
+
+    def update_xylem_damage(self, water_potential, timestep, transpiration_rate):
+        """
+        @param water_potential: (MPa)
+        @param timestep: (s)
+        @param transpiration_rate: (mmol m-2 s-1)
+        @return: bool indicting if the model has changed
+        """
+
+        if water_potential >= self._xylem_recovery_water_potnetial:
+            return self._recover_xylem(water_potential, timestep)
+
+        return self._damage_xylem(water_potential, timestep, transpiration_rate)
+
+    def _damage_xylem(self, water_potential, timestep, transpiration_rate):
+        """
+        @param water_potential: (MPa)
+        @param timestep: (s)
+        @param transpiration_rate: (mmol m-2 s-1)
+        @return: bool indicting if the model has changed
+        """
+        return False
+
+    def _recover_xylem(self, water_potential, timestep):
+        """
+        @param water_potential: (MPa)
+        @param timestep: (s)
+        @return: bool indicting if the model has changed
+        """
+        return False
 
     @property
     def maximum_conductance(self):
