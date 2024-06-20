@@ -19,7 +19,8 @@ class CumulativeWeibullDistribution(HydraulicConductanceModel):
                  sensitivity_parameter: float,
                  shape_parameter: float,
                  critical_conductance_loss_fraction: float = 0.9,
-                 xylem_recovery_water_potnetial: float = 0.):
+                 xylem_recovery_water_potnetial: float = 0.,
+                 PLC_damage_threshold: float = 0.1):
 
         """
 
@@ -30,9 +31,12 @@ class CumulativeWeibullDistribution(HydraulicConductanceModel):
         @param xylem_recovery_water_potnetial: (MPa)
         """
 
-        super().__init__(maximum_conductance, critical_conductance_loss_fraction, xylem_recovery_water_potnetial)
         self._sensitivity_parameter = sensitivity_parameter
         self._shape_parameter = shape_parameter
+        super().__init__(maximum_conductance,
+                         critical_conductance_loss_fraction,
+                         xylem_recovery_water_potnetial,
+                         PLC_damage_threshold)
 
     def conductance(self, water_potential):
 
@@ -54,7 +58,7 @@ class CumulativeWeibullDistribution(HydraulicConductanceModel):
         @return: (MPa)
         """
 
-        conductivity_fraction = 1 - conductivity_loss_fraction
+        conductivity_fraction = 1. - conductivity_loss_fraction
 
         return self.sensitivity_parameter * power(- log(conductivity_fraction), 1/self.shape_parameter)
 
@@ -100,11 +104,16 @@ def cumulative_Weibull_distribution(water_potentials, maximum_conductance, sensi
     return maximum_conductance * exp(exponent)
 
 
-def cumulative_Weibull_distribution_from_conductance_loss_at_given_water_potentials(maximum_conductance,
-                                                                                    water_potential_1,
-                                                                                    water_potential_2,
-                                                                                    conductance_loss_fraction_1,
-                                                                                    conductance_loss_fraction_2):
+def cumulative_Weibull_distribution_from_conductance_loss_at_given_water_potentials(
+        maximum_conductance,
+        water_potential_1,
+        water_potential_2,
+        conductance_loss_fraction_1,
+        conductance_loss_fraction_2,
+        critical_conductance_loss_fraction = 0.9,
+        xylem_recovery_water_potnetial = 0.,
+        PLC_damage_threshold = 0.1
+        ):
 
     """
     Creates a cumulative Weibull distribution from the fractional conductive loss at two given water potentials
@@ -114,6 +123,9 @@ def cumulative_Weibull_distribution_from_conductance_loss_at_given_water_potenti
     @param water_potential_2: (MPa)
     @param conductance_loss_fraction_1: (unitless)
     @param conductance_loss_fraction_2: (unitless)
+    @param critical_conductance_loss_fraction: (unitless)
+    @param xylem_recovery_water_potnetial: (MPa)
+    @param PLC_damage_threshold: (unitless)
 
     @return: CumulativeWeibullDistribution
     """
@@ -123,9 +135,16 @@ def cumulative_Weibull_distribution_from_conductance_loss_at_given_water_potenti
                                                                          water_potential_1,
                                                                          water_potential_2,
                                                                          conductance_loss_fraction_1,
-                                                                         conductance_loss_fraction_2)
+                                                                         conductance_loss_fraction_2
+                                                                         )
 
-    return CumulativeWeibullDistribution(maximum_conductance, sensitivity_parameter, shape_parameter)
+    return CumulativeWeibullDistribution(maximum_conductance,
+                                         sensitivity_parameter,
+                                         shape_parameter,
+                                         critical_conductance_loss_fraction,
+                                         xylem_recovery_water_potnetial,
+                                         PLC_damage_threshold
+                                         )
 
 def cumulative_Weibull_distribution_parameters_from_conductance_loss(maximum_conductance,
                                                                      water_potential_1,
