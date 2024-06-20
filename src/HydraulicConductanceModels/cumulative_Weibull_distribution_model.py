@@ -118,8 +118,33 @@ def cumulative_Weibull_distribution_from_conductance_loss_at_given_water_potenti
     @return: CumulativeWeibullDistribution
     """
 
-    ln_of_conductance_fraction_1 = log(1-conductance_loss_fraction_1)
-    ln_of_conductance_fraction_2 = log(1-conductance_loss_fraction_2)
+    maximum_conductance, sensitivity_parameter, shape_parameter = \
+        cumulative_Weibull_distribution_parameters_from_conductance_loss(maximum_conductance,
+                                                                         water_potential_1,
+                                                                         water_potential_2,
+                                                                         conductance_loss_fraction_1,
+                                                                         conductance_loss_fraction_2)
+
+    return CumulativeWeibullDistribution(maximum_conductance, sensitivity_parameter, shape_parameter)
+
+def cumulative_Weibull_distribution_parameters_from_conductance_loss(maximum_conductance,
+                                                                     water_potential_1,
+                                                                     water_potential_2,
+                                                                     conductance_loss_fraction_1,
+                                                                     conductance_loss_fraction_2):
+
+    """
+
+    @param maximum_conductance:
+    @param water_potential_1:
+    @param water_potential_2:
+    @param conductance_loss_fraction_1:
+    @param conductance_loss_fraction_2:
+    @return: maximum conductance, sensitivity parameter, shape parameter
+    """
+
+    ln_of_conductance_fraction_1 = log(1 - conductance_loss_fraction_1)
+    ln_of_conductance_fraction_2 = log(1 - conductance_loss_fraction_2)
 
     ln_of_water_potential_1 = log(abs(water_potential_1))
     ln_of_water_potential_2 = log(abs(water_potential_2))
@@ -127,6 +152,6 @@ def cumulative_Weibull_distribution_from_conductance_loss_at_given_water_potenti
     shape_parameter = ((log(ln_of_conductance_fraction_1 / ln_of_conductance_fraction_2))
                        / (ln_of_water_potential_1 - ln_of_water_potential_2))
 
-    sensitivity_parameter = water_potential_1 / power(-ln_of_conductance_fraction_1, 1/shape_parameter)
+    sensitivity_parameter = water_potential_1 / power(-ln_of_conductance_fraction_1, 1 / shape_parameter)
 
-    return CumulativeWeibullDistribution(maximum_conductance, sensitivity_parameter, shape_parameter)
+    return maximum_conductance, sensitivity_parameter, shape_parameter
