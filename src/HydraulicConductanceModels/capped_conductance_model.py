@@ -12,16 +12,23 @@ class CappedHydraulicConductanceModel(HydraulicConductanceModel):
     _conductance_cap: float
     _base_conductance_model: HydraulicConductanceModel
 
-    def __init__(self, base_conductance_model: HydraulicConductanceModel, conductance_cap: float):
+    def __init__(self,
+                 base_conductance_model: HydraulicConductanceModel,
+                 conductance_cap: float):
 
         """
         @param base_conductance_model: (HydraulicConductanceModel)
         @param conductance_cap: (mmol m-2 s-1 MPa-1)
+        @param PLC_damage_threshold: (unitless)
         """
 
         self._base_conductance_model = base_conductance_model
         self._conductance_cap = conductance_cap
-        super().__init__(base_conductance_model.maximum_conductance)
+
+        super().__init__(base_conductance_model.maximum_conductance,
+                         base_conductance_model.critical_conductance_loss_fraction,
+                         base_conductance_model.xylem_recovery_water_potnetial,
+                         base_conductance_model.PLC_damage_threshold)
 
     def conductance(self, water_potential):
 
@@ -59,6 +66,31 @@ class CappedHydraulicConductanceModel(HydraulicConductanceModel):
 
         return self._base_conductance_model.water_potential_from_conductance(self._conductance_cap)
 
+    def _damage_xylem(self, water_potential, timestep, transpiration_rate):
+
+        """
+        @param water_potential: (MPa)
+        @param timestep: (s)
+        @param transpiration_rate: (mmol m-2 s-1)
+        @return: bool indicting if the model has changed
+        """
+
+        self.update_cap_conductance(self.conductance(water_potential))
+
+        return True
+
+    def _recover_xylem(self, water_potential, timestep):
+
+        """
+        @param water_potential: (MPa)
+        @param timestep: (s)
+        @return: bool indicting if the model has changed
+        """
+
+        self.update_cap_conductance(self._base_conductance_model.conductance(water_potential))
+
+        return True
+
 # -- Getters and Setters --
     def get_cap_conductance(self):
 
@@ -68,7 +100,7 @@ class CappedHydraulicConductanceModel(HydraulicConductanceModel):
 
         return self._conductance_cap
 
-    def update_cap_cpnductance(self, conductance_cap):
+    def update_cap_conductance(self, conductance_cap):
 
         """
         @param conductance_cap: (mmol m-2 s-1 MPa-1)
