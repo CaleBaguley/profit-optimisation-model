@@ -24,7 +24,7 @@ class DSMackayXylemDamageModel(CumulativeWeibullDistribution):
                  shape_parameter,
                  N_sample_points_xylem_damage = 1000,
                  critical_conductance_loss_fraction = 0.9,
-                 PLC_damage_threshold = 0.5,):
+                 PLC_damage_threshold = 0.05):
 
         self._base_maximum_conductance = maximum_conductance
         self._base_sensitivity_parameter = sensitivity_parameter
