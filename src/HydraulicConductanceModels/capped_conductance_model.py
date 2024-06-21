@@ -93,6 +93,15 @@ class CappedHydraulicConductanceModel(HydraulicConductanceModel):
 
         return True
 
+    def reset_xylem_damage(self):
+        """
+        @return: None
+        """
+
+        self.update_cap_conductance(self._base_conductance_model.maximum_conductance)
+
+        return None
+
 # -- Getters and Setters --
     def get_cap_conductance(self):
 
