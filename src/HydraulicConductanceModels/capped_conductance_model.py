@@ -46,7 +46,9 @@ class CappedHydraulicConductanceModel(HydraulicConductanceModel):
         @return: (MPa)
         """
 
-        raise Exception("water_potential_from_conductivity_loss_fraction not calculable in capped conductance model")
+        conductance = self._conductance_cap * (1 - conductivity_loss_fraction)
+
+        return self._base_conductance_model.water_potential_from_conductance(conductance)
 
     def water_potential_from_conductance(self, conductance):
 
@@ -55,7 +57,7 @@ class CappedHydraulicConductanceModel(HydraulicConductanceModel):
         @return: (MPa)
         """
 
-        raise Exception("water_potential_from_conductance not calculable in capped conductance model")
+        return self._base_conductance_model.water_potential_from_conductance(conductance)
 
     def water_potential_at_cap_switch(self):
 
