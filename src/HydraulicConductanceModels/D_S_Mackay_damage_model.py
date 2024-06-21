@@ -88,6 +88,25 @@ class DSMackayXylemDamageModel(CumulativeWeibullDistribution):
 
         return True
 
+    def _recover_xylem(self, water_potential, timestep):
+        """
+        @param water_potential: (MPa)
+        @param timestep: (s)
+        @return: bool indicting if the model has changed
+        """
+        self.reset_xylem_damage()
+        return True
+
+    def reset_xylem_damage(self):
+        """
+        @return: None
+        """
+        self._maximum_conductance = self._base_maximum_conductance
+        self._sensitivity_parameter = self._base_sensitivity_parameter
+        self._shape_parameter = self._base_shape_parameter
+        self._critical_conductance_loss_fraction = self._base_critical_conductance_loss_fraction
+        return None
+
 def D_S_Mackay_damage_model_from_conductance_loss(maximum_conductance,
                                                   water_potential_1,
                                                   water_potential_2,
