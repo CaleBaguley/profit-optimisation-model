@@ -269,3 +269,14 @@ class ProfitOptimisationModel:
                 intercellular_CO2_values,
                 stomatal_conductance_to_CO2_values)
 
+    @property
+    def hydraulic_cost_model(self):
+        return self._hydraulic_cost_model
+
+    @property
+    def leaf_air_coupling_model(self):
+        return self._leaf_air_coupling_model
+
+    @property
+    def CO2_gain_model(self):
+        return self._CO2_gain_model
