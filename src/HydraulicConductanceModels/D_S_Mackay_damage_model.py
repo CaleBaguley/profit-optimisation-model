@@ -26,6 +26,7 @@ class DSMackayXylemDamageModel(CumulativeWeibullDistribution):
                  shape_parameter,
                  N_sample_points_xylem_damage = 1000,
                  critical_conductance_loss_fraction = 0.9,
+                 xylem_recovery_water_potnetial: float = 0.,
                  PLC_damage_threshold = 0.05):
 
         self._base_maximum_conductance = maximum_conductance
@@ -34,11 +35,11 @@ class DSMackayXylemDamageModel(CumulativeWeibullDistribution):
         self._base_critical_conductance_loss_fraction = critical_conductance_loss_fraction
         self._N_sample_points_xylem_damage = N_sample_points_xylem_damage
 
-
         super().__init__(maximum_conductance,
                          sensitivity_parameter,
                          shape_parameter,
                          critical_conductance_loss_fraction,
+                         xylem_recovery_water_potnetial,
                          PLC_damage_threshold)
 
     def _damage_xylem(self, water_potential, timestep, transpiration_rate):
@@ -58,7 +59,7 @@ class DSMackayXylemDamageModel(CumulativeWeibullDistribution):
         b_new = self.water_potential_from_conductance(new_k_max * exp(-1))
 
         # Setup the interim capped conductance model
-        psi_array = linspace(0, self.critical_water_potential, self._N_sample_points_xylem_damage)
+        psi_array = linspace(0., self.critical_water_potential, self._N_sample_points_xylem_damage)
         capped_conductance_array = asarray([self.conductance(psi) for psi in psi_array])
         capped_conductance_array = clip(capped_conductance_array, 0, new_k_max)
 
@@ -94,6 +95,7 @@ def D_S_Mackay_damage_model_from_conductance_loss(maximum_conductance,
                                                   conductance_loss_fraction_2,
                                                   N_sample_points_xylem_damage = 1000,
                                                   critical_conductance_loss_fraction = 0.9,
+                                                  xylem_recovery_water_potnetial = 0.,
                                                   PLC_damage_threshold = 0.05):
 
     """
@@ -120,4 +122,5 @@ def D_S_Mackay_damage_model_from_conductance_loss(maximum_conductance,
                                     shape_parameter,
                                     N_sample_points_xylem_damage,
                                     critical_conductance_loss_fraction,
+                                    xylem_recovery_water_potnetial,
                                     PLC_damage_threshold)
