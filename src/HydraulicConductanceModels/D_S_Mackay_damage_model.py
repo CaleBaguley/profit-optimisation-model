@@ -12,6 +12,7 @@ from src.HydraulicConductanceModels.cumulative_Weibull_distribution_model \
             CumulativeWeibullDistribution,
             cumulative_Weibull_distribution_parameters_from_conductance_loss)
 
+
 class DSMackayXylemDamageModel(CumulativeWeibullDistribution):
 
     _base_maximum_conductance: float
@@ -125,6 +126,7 @@ def D_S_Mackay_damage_model_from_conductance_loss(maximum_conductance,
     @param conductance_loss_fraction_2: unitless
     @param N_sample_points_xylem_damage: int
     @param critical_conductance_loss_fraction: unitless
+    @param xylem_recovery_water_potnetial: MPa
     @param PLC_damage_threshold: unitless
     @return: DSMackayXylemDamageModel
     """
