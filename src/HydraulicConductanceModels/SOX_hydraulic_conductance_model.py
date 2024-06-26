@@ -41,7 +41,7 @@ class SOXHydraulicConductanceModel(HydraulicConductanceModel):
         normalised_conductance = 1/(1+power(water_potential/self._water_potential_at_half_conductance,
                                             self._shape_parameter))
 
-        return self._maximum_conductance * normalised_conductance
+        return self._k_max * normalised_conductance
 
     def water_potential_from_conductivity_loss_fraction(self, conductivity_loss_fraction):
         """

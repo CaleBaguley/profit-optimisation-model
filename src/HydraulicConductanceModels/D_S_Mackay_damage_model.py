@@ -81,7 +81,7 @@ class DSMackayXylemDamageModel(CumulativeWeibullDistribution):
                         x0=self.shape_parameter)[0][0]
 
         # Update model parameters
-        self._maximum_conductance = new_k_max
+        self._k_max = new_k_max
         self._sensitivity_parameter = b_new
         self._shape_parameter = c_new
         self._critical_conductance_loss_fraction = self.critical_conductance / new_k_max
@@ -101,7 +101,7 @@ class DSMackayXylemDamageModel(CumulativeWeibullDistribution):
         """
         @return: None
         """
-        self._maximum_conductance = self._base_maximum_conductance
+        self._k_max = self._base_maximum_conductance
         self._sensitivity_parameter = self._base_sensitivity_parameter
         self._shape_parameter = self._base_shape_parameter
         self._critical_conductance_loss_fraction = self._base_critical_conductance_loss_fraction

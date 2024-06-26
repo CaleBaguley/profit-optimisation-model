@@ -10,7 +10,7 @@ from numpy import linspace, trapz
 
 class HydraulicConductanceModel:
 
-    _maximum_conductance: float
+    _k_max: float
     _critical_conductance_loss_fraction: float
     _xylem_recovery_water_potnetial: float
     _PLC_damage_threshold: float
@@ -27,7 +27,7 @@ class HydraulicConductanceModel:
         @param critical_conductance_loss_fraction: (unitless)
         """
 
-        self._maximum_conductance = maximum_conductance
+        self._k_max = maximum_conductance
         self._critical_conductance_loss_fraction = critical_conductance_loss_fraction
         self._xylem_recovery_water_potnetial = xylem_recovery_water_potnetial
         self._PLC_damage_threshold = PLC_damage_threshold
@@ -123,7 +123,7 @@ class HydraulicConductanceModel:
         """
         @return: (mmol m-2 s-1 MPa-1)
         """
-        return self._maximum_conductance
+        return self._k_max
 
     @property
     def critical_conductance_loss_fraction(self):
