@@ -5,7 +5,7 @@ Analytic implementation of the model of xylem damage by embolism as described by
 -----------------------------------------------------------------------------------------
 """
 
-from numpy import exp, power
+from numpy import exp, power, log
 from src.HydraulicConductanceModels.DynamicModels.D_S_Mackay_damage_model \
     import DSMackayXylemDamageModel
 from src.HydraulicConductanceModels.cumulative_Weibull_distribution_model \
@@ -18,7 +18,6 @@ class DSMackayXylemDamageModelAnalytic(DSMackayXylemDamageModel):
                  maximum_conductance,
                  sensitivity_parameter,
                  shape_parameter,
-                 N_sample_points_xylem_damage=1000,
                  critical_conductance_loss_fraction=0.9,
                  xylem_recovery_water_potnetial: float = 0.,
                  PLC_damage_threshold=0.05):
@@ -26,7 +25,7 @@ class DSMackayXylemDamageModelAnalytic(DSMackayXylemDamageModel):
         super().__init__(maximum_conductance,
                          sensitivity_parameter,
                          shape_parameter,
-                         N_sample_points_xylem_damage,
+                         None,
                          critical_conductance_loss_fraction,
                          xylem_recovery_water_potnetial,
                          PLC_damage_threshold)
@@ -42,19 +41,25 @@ class DSMackayXylemDamageModelAnalytic(DSMackayXylemDamageModel):
 
         new_k_max = self.conductance(water_potential)
 
+        new_k_max = max(new_k_max,
+                        (1 - self._critical_conductance_loss_fraction) * self._base_maximum_conductance)
+
         # find the new sensitivity parameter. This is the water potential at which the
-        # conductance of the current model is equal to the new k_max value times e to
+        # conductance of the healthy model is equal to the new k_max value times e to
         # the minus one.
-        b_new = self.water_potential_from_conductance(new_k_max * exp(-1))
+        k_at_new_b = new_k_max * exp(-1)
+        b_new = (self._base_sensitivity_parameter
+                 * power(- log(k_at_new_b/self._base_maximum_conductance),
+                         1/self._base_shape_parameter))
 
         # Calculate the shape parameter c. This is done by forcing the new model to have
         # the same grgadient as the previous one when the water potential is equal to the
         # new_b value.
-        exponent = 1 - power(b_new/self._sensitivity_parameter, self._shape_parameter)
+        exponent = 1 - power(b_new/self._base_sensitivity_parameter, self._base_shape_parameter)
 
-        new_c = (self._shape_parameter
-                 * power(b_new/self._sensitivity_parameter, self._shape_parameter)
-                 * (self._k_max / new_k_max)
+        new_c = (self._base_shape_parameter
+                 * power(b_new/self._base_sensitivity_parameter, self._base_shape_parameter)
+                 * (self._base_maximum_conductance / new_k_max)
                  * exp(exponent))
 
         self._k_max = new_k_max
@@ -69,7 +74,6 @@ def analytic_D_S_Mackay_damage_model_from_conductance_loss(maximum_conductance,
                                                            water_potential_2,
                                                            conductance_loss_fraction_1,
                                                            conductance_loss_fraction_2,
-                                                           N_sample_points_xylem_damage = 1000,
                                                            critical_conductance_loss_fraction = 0.9,
                                                            xylem_recovery_water_potnetial = 0.,
                                                            PLC_damage_threshold = 0.05):
@@ -97,7 +101,6 @@ def analytic_D_S_Mackay_damage_model_from_conductance_loss(maximum_conductance,
     return DSMackayXylemDamageModelAnalytic(maximum_conductance,
                                             sensitivity_parameter,
                                             shape_parameter,
-                                            N_sample_points_xylem_damage,
                                             critical_conductance_loss_fraction,
                                             xylem_recovery_water_potnetial,
                                             PLC_damage_threshold)
