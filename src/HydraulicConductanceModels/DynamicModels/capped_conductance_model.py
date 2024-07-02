@@ -14,7 +14,7 @@ class CappedHydraulicConductanceModel(HydraulicConductanceModel):
 
     def __init__(self,
                  base_conductance_model: HydraulicConductanceModel,
-                 conductance_cap: float):
+                 conductance_cap: float = None):
 
         """
         @param base_conductance_model: (HydraulicConductanceModel)
@@ -23,7 +23,11 @@ class CappedHydraulicConductanceModel(HydraulicConductanceModel):
         """
 
         self._base_conductance_model = base_conductance_model
-        self._conductance_cap = conductance_cap
+
+        if(conductance_cap is None):
+            self._conductance_cap = base_conductance_model.maximum_conductance
+        else:
+            self._conductance_cap = conductance_cap
 
         super().__init__(base_conductance_model.maximum_conductance,
                          base_conductance_model.critical_conductance_loss_fraction,
