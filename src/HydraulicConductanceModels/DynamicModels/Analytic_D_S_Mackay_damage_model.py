@@ -41,6 +41,18 @@ class DSMackayXylemDamageModelAnalytic(DSMackayXylemDamageModel):
 
         new_k_max = self.conductance(water_potential)
 
+        self._update_given_new_maximum_conductance(new_k_max)
+
+        return True
+
+    def _update_given_new_maximum_conductance(self, new_k_max):
+
+        """
+        Update the shape of the vulnerability curve given a new maximum conductance.
+        @param new_k_max:
+        @return: None
+        """
+
         new_k_max = max(new_k_max,
                         (1 - self._critical_conductance_loss_fraction) * self._base_maximum_conductance)
 
@@ -49,24 +61,22 @@ class DSMackayXylemDamageModelAnalytic(DSMackayXylemDamageModel):
         # the minus one.
         k_at_new_b = new_k_max * exp(-1)
         b_new = (self._base_sensitivity_parameter
-                 * power(- log(k_at_new_b/self._base_maximum_conductance),
-                         1/self._base_shape_parameter))
+                 * power(- log(k_at_new_b / self._base_maximum_conductance),
+                         1 / self._base_shape_parameter))
 
         # Calculate the shape parameter c. This is done by forcing the new model to have
-        # the same grgadient as the previous one when the water potential is equal to the
+        # the same gradient as the previous one when the water potential is equal to the
         # new_b value.
-        exponent = 1 - power(b_new/self._base_sensitivity_parameter, self._base_shape_parameter)
+        exponent = 1 - power(b_new / self._base_sensitivity_parameter, self._base_shape_parameter)
 
         new_c = (self._base_shape_parameter
-                 * power(b_new/self._base_sensitivity_parameter, self._base_shape_parameter)
+                 * power(b_new / self._base_sensitivity_parameter, self._base_shape_parameter)
                  * (self._base_maximum_conductance / new_k_max)
                  * exp(exponent))
 
         self._k_max = new_k_max
         self._sensitivity_parameter = b_new
         self._shape_parameter = new_c
-
-        return True
 
 
 def analytic_D_S_Mackay_damage_model_from_conductance_loss(maximum_conductance,
