@@ -53,8 +53,9 @@ class DSMackayXylemDamageModelAnalytic(DSMackayXylemDamageModel):
         @return: None
         """
 
-        new_k_max = max(new_k_max,
-                        (1 - self._critical_conductance_loss_fraction) * self._base_maximum_conductance)
+        new_k_max = min(max(new_k_max,
+                            (1. - self._critical_conductance_loss_fraction) * self._base_maximum_conductance),
+                        self._base_maximum_conductance)
 
         # find the new sensitivity parameter. This is the water potential at which the
         # conductance of the healthy model is equal to the new k_max value times e to
