@@ -122,6 +122,7 @@ class CappedHydraulicConductanceModel(HydraulicConductanceModel):
         """
 
         self._conductance_cap = conductance_cap
+        self._k_max = conductance_cap
 
     def get_base_conductance_model(self):
 
