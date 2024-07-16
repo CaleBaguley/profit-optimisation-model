@@ -11,6 +11,7 @@ from numpy import linspace, trapz
 class HydraulicConductanceModel:
 
     _k_max: float
+    _base_k_max: float # Holds initial K_max value. Doesn't change.
     _critical_conductance_loss_fraction: float
     _xylem_recovery_water_potnetial: float
     _PLC_damage_threshold: float
@@ -28,6 +29,7 @@ class HydraulicConductanceModel:
         """
 
         self._k_max = maximum_conductance
+        self._base_k_max = maximum_conductance
         self._critical_conductance_loss_fraction = critical_conductance_loss_fraction
         self._xylem_recovery_water_potnetial = xylem_recovery_water_potnetial
         self._PLC_damage_threshold = PLC_damage_threshold
@@ -41,6 +43,13 @@ class HydraulicConductanceModel:
         """
 
         raise Exception("conductance method not implemented in base class")
+
+    def PLC(self, water_potential):
+        """
+        @param water_potential: (MPa)
+        @return: (unitless)
+        """
+        return 100*(1 - self.conductance(water_potential)/self.healthy_maximum_conductance)
 
     def water_potential_from_conductivity_loss_fraction(self, conductivity_loss_fraction):
         """
@@ -124,6 +133,13 @@ class HydraulicConductanceModel:
         @return: (mmol m-2 s-1 MPa-1)
         """
         return self._k_max
+
+    @property
+    def healthy_maximum_conductance(self):
+        """
+        @return: (mmol m-2 s-1 MPa-1)
+        """
+        return self._base_k_max
 
     @property
     def critical_conductance_loss_fraction(self):
