@@ -14,6 +14,8 @@ from numpy import power
 
 class JBDynamicXylemConductanceModel(DSMackayXylemDamageModelAnalytic):
 
+    _sapwood_area: float
+    _base_sapwood_area: float
     _recovery_rate: float
     _recovery_shape: float
     _impairment_rate: float
@@ -38,6 +40,7 @@ class JBDynamicXylemConductanceModel(DSMackayXylemDamageModelAnalytic):
                  ):
 
         self._sapwood_area = sapwood_area
+        self._base_sapwood_area = sapwood_area
         self._recovery_rate = recovery_rate
         self._recovery_shape = recovery_shape
         self._impairment_rate = impairment_rate
@@ -81,10 +84,24 @@ class JBDynamicXylemConductanceModel(DSMackayXylemDamageModelAnalytic):
         return False
 
     def _calc_recovery_rate(self, k_leaf):
-        return self._recovery_rate * (1 - k_leaf / self._k_max)**self._recovery_shape
+        return self._recovery_rate * (1 - k_leaf / self.maximum_conductance)**self._recovery_shape
 
     def _calc_impairment_rate(self, k_leaf):
-        return self._impairment_rate * (k_leaf / self._k_max)**self._impairment_shape
+        return self._impairment_rate * (k_leaf / self.maximum_conductance)**self._impairment_shape
+
+    def reset_xylem_damage(self):
+        """
+        @return: None
+        """
+        self._k_max = self._base_maximum_conductance
+        self._sensitivity_parameter = self._base_sensitivity_parameter
+        self._shape_parameter = self._base_shape_parameter
+        self._critical_conductance_loss_fraction = self._base_critical_conductance_loss_fraction
+        self._sapwood_area = self._base_sapwood_area
+        return None
+
+    #def conductance(self, water_potential):
+    #    return self._sapwood_area * super().conductance(water_potential)
 
     # -- Properties --
     @property
@@ -114,6 +131,10 @@ class JBDynamicXylemConductanceModel(DSMackayXylemDamageModelAnalytic):
     @property
     def healthy_fraction(self):
         return self._k_max / self._base_maximum_conductance
+
+    @property
+    def maximum_conductance(self):
+        return self._sapwood_area * self._k_max
 
 
 def JB_xylem_damage_model_from_conductance_loss(maximum_conductance,
