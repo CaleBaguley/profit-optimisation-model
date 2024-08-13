@@ -7,18 +7,24 @@ out the full model creation code.
 """
 
 # -- Import the required libraries --
+# Hydraulic conductance models
 from profit_optimisation_model.src.HydraulicConductanceModels.cumulative_Weibull_distribution_model import (
     cumulative_Weibull_distribution_from_conductance_loss_at_given_water_potentials)
 from profit_optimisation_model.src.HydraulicConductanceModels.SOX_hydraulic_conductance_model import (
     SOX_conductance_model_from_conductance_loss_at_goven_water_potentials)
 
+# Hydraulic cost models
 from profit_optimisation_model.src.ProfitModels.HydraulicCostModels.hydraulic_cost_profit_max_model import (
     ProfitMaxHydraulicCostModel)
 from profit_optimisation_model.src.ProfitModels.HydraulicCostModels.hydraulic_cost_SOX_model import (
     SOXHydraulicCostModel)
 
+# Leaf to air coupling model
 from profit_optimisation_model.src.leaf_air_coupling_model import LeafAirCouplingModel
 
+# Photosynthesis models
+from profit_optimisation_model.src.PhotosynthesisModels.Leuning_Model import \
+    PhotosynthesisModelRubiscoLimitedLeuning, PhotosynthesisModelElectronTransportLimitedLeuning
 from profit_optimisation_model.src.PhotosynthesisModels.photosynthesis_model import PhotosynthesisModel
 
 from profit_optimisation_model.src.ProfitModels.CO2GainModels.CO2_gain_profit_max_model import ProfitMaxCO2GainModel
@@ -39,6 +45,8 @@ def build_profit_max_model():
 
     conductance_model = cumulative_Weibull_distribution_from_conductance_loss_at_given_water_potentials( P50,
                                                                                                          P88,
+                                                                                                         0.5,
+                                                                                                         0.88,
                                                                                                          k_max)
 
     # hydraulic cost model
@@ -50,7 +58,9 @@ def build_profit_max_model():
     leaf_air_coupling_model = LeafAirCouplingModel()
 
     # photosynthesis model
-    photosynthesis_model = PhotosynthesisModel()
+    electron_transport_limited = PhotosynthesisModelElectronTransportLimitedLeuning()
+    rubisco_limited = PhotosynthesisModelRubiscoLimitedLeuning()
+    photosynthesis_model = PhotosynthesisModel(electron_transport_limited, rubisco_limited)
 
     # CO2 gain model
     CO2_gain_model = ProfitMaxCO2GainModel(leaf_air_coupling_model,
@@ -69,6 +79,8 @@ def build_SOX_model():
     k_max = 0.2  # mmol m-2 s-1 MPa-1
     conductance_model = SOX_conductance_model_from_conductance_loss_at_goven_water_potentials(P50,
                                                                                               P88,
+                                                                                              0.5,
+                                                                                              0.88,
                                                                                               k_max)
 
     # hydraulic cost model
@@ -80,7 +92,9 @@ def build_SOX_model():
     leaf_air_coupling_model = LeafAirCouplingModel()
 
     # photosynthesis model
-    photosynthesis_model = PhotosynthesisModel()
+    electron_transport_limited = PhotosynthesisModelElectronTransportLimitedLeuning()
+    rubisco_limited = PhotosynthesisModelRubiscoLimitedLeuning()
+    photosynthesis_model = PhotosynthesisModel(electron_transport_limited, rubisco_limited)
 
     # CO2 gain model
     CO2_gain_model = SOXCO2GainModel(leaf_air_coupling_model,
