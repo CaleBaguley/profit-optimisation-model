@@ -10,7 +10,7 @@ packages = ['profit-optimisation-model',
             'profit-optimisation-model.src.ProfitModels',
             'profit-optimisation-model.src.ProfitModels.CO2GainModels',
             'profit-optimisation-model.src.ProfitModels.HydraulicCostModels',
-            'profit-optimisation-model.src.ProfitModels.TemperatureModels'
+            'profit-optimisation-model.src.TemperatureDependenceModels'
             ]
 
 setup(name='Stomatal Optimisation Models',
