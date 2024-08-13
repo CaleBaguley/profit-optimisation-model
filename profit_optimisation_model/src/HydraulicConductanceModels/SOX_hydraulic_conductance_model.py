@@ -97,7 +97,7 @@ def SOX_conductance_parameters_from_conductance_loss_at_goven_water_potentials(
     ):
 
     shape_parameter = (log(1/conductance_loss_fraction_1 - 1) - log(1/conductance_loss_fraction_2 - 1)
-                       / (log(water_potential_1) - log(water_potential_2)))
+                       / (log(water_potential_1 / water_potential_2)))
 
     water_potential_at_half_conductance = (water_potential_1
                                            * power(1/conductance_loss_fraction_1 - 1, -1/shape_parameter))
