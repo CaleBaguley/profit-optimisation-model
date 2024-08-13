@@ -7,25 +7,25 @@ out the full model creation code.
 """
 
 # -- Import the required libraries --
-from src.HydraulicConductanceModels.cumulative_Weibull_distribution_model import (
+from profit_optimisation_model.src.HydraulicConductanceModels.cumulative_Weibull_distribution_model import (
     cumulative_Weibull_distribution_from_conductance_loss_at_given_water_potentials)
-from src.HydraulicConductanceModels.SOX_model import (
+from profit_optimisation_model.src.HydraulicConductanceModels.SOX_hydraulic_conductance_model import (
     SOX_conductance_model_from_conductance_loss_at_goven_water_potentials)
 
-from src.ProfitModels.HydraulicCostModels.hydraulic_cost_profit_max_model import (
+from profit_optimisation_model.src.ProfitModels.HydraulicCostModels.hydraulic_cost_profit_max_model import (
     ProfitMaxHydraulicCostModel)
-from src.ProfitModels.HydraulicCostModels.hydraulic_cost_SOX_model import (
+from profit_optimisation_model.src.ProfitModels.HydraulicCostModels.hydraulic_cost_SOX_model import (
     SOXHydraulicCostModel)
 
-from src.leaf_air_coupling_model import LeafAirCouplingModel
+from profit_optimisation_model.src.leaf_air_coupling_model import LeafAirCouplingModel
 
-from src.PhotosynthesisModels.photosynthesis_model import PhotosynthesisModel
+from profit_optimisation_model.src.PhotosynthesisModels.photosynthesis_model import PhotosynthesisModel
 
-from src.ProfitModels.CO2GainModels.CO2_gain_profit_max_model import ProfitMaxCO2GainModel
-from src.ProfitModels.CO2GainModels.CO2_gain_SOX_model import SOXCO2GainModel
+from profit_optimisation_model.src.ProfitModels.CO2GainModels.CO2_gain_profit_max_model import ProfitMaxCO2GainModel
+from profit_optimisation_model.src.ProfitModels.CO2GainModels.CO2_gain_SOX_model import SOXCO2GainModel
 
-from src.ProfitModels.profit_max_model import ProfitMaxModel
-from src.ProfitModels.SOX_model import SOXModel
+from profit_optimisation_model.src.ProfitModels.profit_max_model import ProfitMaxModel
+from profit_optimisation_model.src.ProfitModels.SoxModel import SOXModel
 
 # -- Define the preset models -------------------------------------------
 

@@ -4,7 +4,7 @@
 -------------------------------------------------------------------------
 """
 
-from src.ProfitModels.CO2GainModels.CO2_gain_model import CO2GainModelDummy
+from profit_optimisation_model.src.ProfitModels.CO2GainModels.CO2_gain_model import CO2GainModelDummy
 
 
 class SOXCO2GainModel(CO2GainModelDummy):

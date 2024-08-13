@@ -4,7 +4,7 @@
 -------------------------------------------------------------------------
 """
 
-from src.conversions import magnitude_conversion, degrees_kelvin_to_centigrade
+from profit_optimisation_model.src.conversions import magnitude_conversion, degrees_kelvin_to_centigrade
 from numpy import exp
 from numpy import where
 

@@ -4,7 +4,7 @@
 -------------------------------------------------------------------------
 """
 
-from src.conversions import convert_stomatal_conductance_of_water_to_carbon
+from profit_optimisation_model.src.conversions import convert_stomatal_conductance_of_water_to_carbon
 
 
 class LeafAirCouplingModel:

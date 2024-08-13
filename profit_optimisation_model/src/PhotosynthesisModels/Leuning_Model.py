@@ -9,12 +9,17 @@ Eucalyptus grandis" R. Leuning 1990.
 import numpy as np
 from numpy import roots, nanmax
 
-from src.PhotosynthesisModels.photosynthesis_model import PhotosynthesisModelDummy
-from src.TemperatureDependenceModels.Q10_temperature_dependence_model import Q10TemperatureDependenceModel
-from src.TemperatureDependenceModels.arrhenius_and_peaked_arrhenius_function import ArrheniusModel
-from src.TemperatureDependenceModels.temperature_dependence_model import TemperatureDependenceModel
-from src.electron_transport_rate_model import ElectronTransportRateModel
-from src.rubisco_CO2_and_O_model import RubiscoRates
+from profit_optimisation_model.src.PhotosynthesisModels.photosynthesis_model \
+    import PhotosynthesisModelDummy
+from profit_optimisation_model.src.TemperatureDependenceModels.Q10_temperature_dependence_model \
+    import Q10TemperatureDependenceModel
+from profit_optimisation_model.src.TemperatureDependenceModels.arrhenius_and_peaked_arrhenius_function \
+    import ArrheniusModel
+from profit_optimisation_model.src.TemperatureDependenceModels.temperature_dependence_model \
+    import TemperatureDependenceModel
+from profit_optimisation_model.src.electron_transport_rate_model \
+    import ElectronTransportRateModel
+from profit_optimisation_model.src.rubisco_CO2_and_O_model import RubiscoRates
 
 
 class PhotosynthesisModelRubiscoLimitedLeuning(PhotosynthesisModelDummy):

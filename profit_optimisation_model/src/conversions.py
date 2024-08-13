@@ -2,7 +2,7 @@
 A set of functions for converting between various units
 """
 
-from src.constants import MOLAR_MASS_OF_WATER
+from profit_optimisation_model.src.constants import MOLAR_MASS_OF_WATER
 from numpy import power
 
 # -- Conversion constants: --

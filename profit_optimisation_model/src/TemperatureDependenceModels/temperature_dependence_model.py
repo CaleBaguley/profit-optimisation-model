@@ -5,7 +5,7 @@ Base class for temperature dependent models
 """
 
 
-from src.conversions import degrees_centigrade_to_kelvin
+from profit_optimisation_model.src.conversions import degrees_centigrade_to_kelvin
 
 from numpy import full, ndarray, zeros, float64
 

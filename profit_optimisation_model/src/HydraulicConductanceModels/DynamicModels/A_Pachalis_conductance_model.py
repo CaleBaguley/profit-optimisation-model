@@ -6,7 +6,8 @@ https://pubmed.ncbi.nlm.nih.gov/37962234/
 -----------------------------------------------------------------------------------------
 """
 
-from src.HydraulicConductanceModels.hydraulic_conductance_model import HydraulicConductanceModel
+from profit_optimisation_model.src.HydraulicConductanceModels.hydraulic_conductance_model import (
+    HydraulicConductanceModel)
 from numpy import array as np_array
 from numpy import ndarray, float64
 from numpy import linspace, ones, zeros

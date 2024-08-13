@@ -4,8 +4,10 @@ Model for calculating the rate of carboxylation and oxygenation by Rubisco.
 --------------------------------------------------------------------------------------------
 """
 
-from src.TemperatureDependenceModels.arrhenius_and_peaked_arrhenius_function import ArrheniusModel, PeakedArrheniusModel
-from src.michaelis_menten_response_function import michaelis_menten_constant, michaelis_menten_response_function
+from profit_optimisation_model.src.TemperatureDependenceModels.arrhenius_and_peaked_arrhenius_function import(
+    ArrheniusModel, PeakedArrheniusModel)
+from profit_optimisation_model.src.michaelis_menten_response_function import (
+    michaelis_menten_constant, michaelis_menten_response_function)
 
 
 class RubiscoRates:

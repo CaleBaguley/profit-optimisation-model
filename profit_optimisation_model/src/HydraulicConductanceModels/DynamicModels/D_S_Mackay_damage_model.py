@@ -7,7 +7,7 @@ Implimentation of the model of xylem damage by embolism as described by D.S.Mack
 
 from numpy import exp, linspace, asarray, clip, sum
 from scipy.optimize import leastsq
-from src.HydraulicConductanceModels.cumulative_Weibull_distribution_model \
+from profit_optimisation_model.src.HydraulicConductanceModels.cumulative_Weibull_distribution_model \
     import (cumulative_Weibull_distribution,
             CumulativeWeibullDistribution,
             cumulative_Weibull_distribution_parameters_from_conductance_loss)

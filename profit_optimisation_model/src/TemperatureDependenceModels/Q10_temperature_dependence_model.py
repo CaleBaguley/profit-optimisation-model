@@ -4,8 +4,9 @@ Implementation of the Q10 temperature dependence model
 -------------------------------------------------------------------------
 """
 
-from src.TemperatureDependenceModels.temperature_dependence_model import TemperatureDependenceModel
-from src.conversions import TWENTY_FIVE_DEGREES_CENTIGRADE_IN_KELVIN
+from profit_optimisation_model.src.TemperatureDependenceModels.temperature_dependence_model \
+    import TemperatureDependenceModel
+from profit_optimisation_model.src.conversions import TWENTY_FIVE_DEGREES_CENTIGRADE_IN_KELVIN
 from numpy import power
 
 

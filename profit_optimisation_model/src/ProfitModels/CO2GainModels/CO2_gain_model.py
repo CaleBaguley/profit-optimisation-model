@@ -5,9 +5,9 @@
 """
 
 from numpy import zeros
-from src.leaf_air_coupling_model import LeafAirCouplingModel
-from src.PhotosynthesisModels.photosynthesis_model import PhotosynthesisModelDummy
-from src.conversions import magnitude_conversion
+from profit_optimisation_model.src.leaf_air_coupling_model import LeafAirCouplingModel
+from profit_optimisation_model.src.PhotosynthesisModels.photosynthesis_model import PhotosynthesisModelDummy
+from profit_optimisation_model.src.conversions import magnitude_conversion
 
 
 class CO2GainModelDummy:

@@ -4,7 +4,7 @@ Implementation of SOX model (C. B. Eller et al 2018)
 -------------------------------------------------------------------------
 """
 
-from src.ProfitModels.profit_optimisation_model import ProfitOptimisationModel
+from profit_optimisation_model.src.ProfitModels.profit_optimisation_model import ProfitOptimisationModel
 
 
 class SOXModel(ProfitOptimisationModel):

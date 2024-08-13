@@ -3,9 +3,10 @@ Code for the Arrhenius and peaked Arrhenius functions.
 """
 
 from numpy import exp
-from src.constants import MOLAR_GAS_CONSTANT
-from src.conversions import TWENTY_FIVE_DEGREES_CENTIGRADE_IN_KELVIN
-from src.TemperatureDependenceModels.temperature_dependence_model import TemperatureDependenceModel
+from profit_optimisation_model.src.constants import MOLAR_GAS_CONSTANT
+from profit_optimisation_model.src.conversions import TWENTY_FIVE_DEGREES_CENTIGRADE_IN_KELVIN
+from profit_optimisation_model.src.TemperatureDependenceModels.temperature_dependence_model \
+    import TemperatureDependenceModel
 
 
 class ArrheniusModel(TemperatureDependenceModel):

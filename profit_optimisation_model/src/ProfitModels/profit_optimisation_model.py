@@ -4,9 +4,9 @@
 -------------------------------------------------------------------------
 """
 
-from src.ProfitModels.HydraulicCostModels.hydraulic_cost_model import HydraulicCostModel
-from src.leaf_air_coupling_model import LeafAirCouplingModel
-from src.ProfitModels.CO2GainModels.CO2_gain_model import CO2GainModelDummy
+from profit_optimisation_model.src.ProfitModels.HydraulicCostModels.hydraulic_cost_model import HydraulicCostModel
+from profit_optimisation_model.src.leaf_air_coupling_model import LeafAirCouplingModel
+from profit_optimisation_model.src.ProfitModels.CO2GainModels.CO2_gain_model import CO2GainModelDummy
 from numpy import zeros, linspace
 from numpy import argwhere, nanargmax
 

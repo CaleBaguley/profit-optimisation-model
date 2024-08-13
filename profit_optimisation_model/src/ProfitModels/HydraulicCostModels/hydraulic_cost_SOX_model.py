@@ -4,7 +4,8 @@
 --------------------------------------------------------------------------------
 """
 
-from src.ProfitModels.HydraulicCostModels.hydraulic_cost_model import HydraulicCostModel
+from profit_optimisation_model.src.ProfitModels.HydraulicCostModels.hydraulic_cost_model \
+    import HydraulicCostModel
 
 
 class SOXHydraulicCostModel(HydraulicCostModel):
