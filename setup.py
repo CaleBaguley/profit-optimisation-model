@@ -2,15 +2,15 @@
 
 from setuptools import setup
 
-packages = ['profit-optimisation-model',
-            'profit-optimisation-model.src',
-            'profit-optimisation-model.src.HydraulicConductanceModels',
-            'profit-optimisation-model.src.HydraulicConductanceModels.DynamicModels',
-            'profit-optimisation-model.src.PhotosynthesisModels',
-            'profit-optimisation-model.src.ProfitModels',
-            'profit-optimisation-model.src.ProfitModels.CO2GainModels',
-            'profit-optimisation-model.src.ProfitModels.HydraulicCostModels',
-            'profit-optimisation-model.src.TemperatureDependenceModels'
+packages = ['profit_optimisation_model',
+            'profit_optimisation_model.src',
+            'profit_optimisation_model.src.HydraulicConductanceModels',
+            'profit_optimisation_model.src.HydraulicConductanceModels.DynamicModels',
+            'profit_optimisation_model.src.PhotosynthesisModels',
+            'profit_optimisation_model.src.ProfitModels',
+            'profit_optimisation_model.src.ProfitModels.CO2GainModels',
+            'profit_optimisation_model.src.ProfitModels.HydraulicCostModels',
+            'profit_optimisation_model.src.TemperatureDependenceModels'
             ]
 
 setup(name='Stomatal Optimisation Models',
