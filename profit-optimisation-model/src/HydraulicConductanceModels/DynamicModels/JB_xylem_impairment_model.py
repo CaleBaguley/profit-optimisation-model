@@ -9,8 +9,6 @@ from src.HydraulicConductanceModels.DynamicModels.Analytic_D_S_Mackay_damage_mod
 from src.HydraulicConductanceModels.cumulative_Weibull_distribution_model \
     import (cumulative_Weibull_distribution_parameters_from_conductance_loss)
 
-from numpy import power
-
 
 class JBDynamicXylemConductanceModel(DSMackayXylemDamageModelAnalytic):
 
@@ -79,15 +77,16 @@ class JBDynamicXylemConductanceModel(DSMackayXylemDamageModelAnalytic):
         new_k_max = self._k_max + recovery - impairment + growth - death
 
         # Update b and c parameters
+        #self._k_max = max(new_k_max, self.critical_conductance)
         self._update_given_new_maximum_conductance(new_k_max)
 
         return False
 
     def _calc_recovery_rate(self, k_leaf):
-        return self._recovery_rate * (1 - k_leaf / self.maximum_conductance)**self._recovery_shape
+        return self._recovery_rate * (k_leaf / self.maximum_conductance)**self._recovery_shape
 
     def _calc_impairment_rate(self, k_leaf):
-        return self._impairment_rate * (k_leaf / self.maximum_conductance)**self._impairment_shape
+        return self._impairment_rate * (1 - k_leaf / self.maximum_conductance)**self._impairment_shape
 
     def reset_xylem_damage(self):
         """

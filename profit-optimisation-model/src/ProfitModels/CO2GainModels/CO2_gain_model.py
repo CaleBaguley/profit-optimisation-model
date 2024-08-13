@@ -4,7 +4,7 @@
 -------------------------------------------------------------------------
 """
 
-from numpy import zeros, nanmax
+from numpy import zeros
 from src.leaf_air_coupling_model import LeafAirCouplingModel
 from src.PhotosynthesisModels.photosynthesis_model import PhotosynthesisModelDummy
 from src.conversions import magnitude_conversion

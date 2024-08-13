@@ -5,7 +5,6 @@ Analytic implementation of the model of xylem damage by embolism as described by
 -----------------------------------------------------------------------------------------
 """
 
-from numpy import exp, power
 from src.HydraulicConductanceModels.DynamicModels.Analytic_D_S_Mackay_damage_model \
     import DSMackayXylemDamageModelAnalytic
 from src.HydraulicConductanceModels.cumulative_Weibull_distribution_model \

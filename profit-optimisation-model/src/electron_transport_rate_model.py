@@ -7,7 +7,6 @@ Class for modeling the electron transport rate during photosynthesis
 from src.TemperatureDependenceModels.temperature_dependence_model import (TemperatureDependenceModel,
                                                                           LowTemperatureAdjustedModel)
 from src.TemperatureDependenceModels.arrhenius_and_peaked_arrhenius_function import PeakedArrheniusModel
-from numpy import roots, argwhere, amin
 import math
 import numpy as np
 

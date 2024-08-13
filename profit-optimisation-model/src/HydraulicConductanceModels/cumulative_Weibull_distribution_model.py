@@ -6,7 +6,6 @@
 
 from src.HydraulicConductanceModels.hydraulic_conductance_model import HydraulicConductanceModel
 from numpy import exp, power, log, abs
-from numpy import linspace, trapz
 
 
 class CumulativeWeibullDistribution(HydraulicConductanceModel):

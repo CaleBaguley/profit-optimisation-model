@@ -5,7 +5,6 @@
 """
 
 from src.ProfitModels.HydraulicCostModels.hydraulic_cost_model import HydraulicCostModel
-from src.HydraulicConductanceModels.hydraulic_conductance_model import HydraulicConductanceModel
 
 
 class SOXHydraulicCostModel(HydraulicCostModel):
