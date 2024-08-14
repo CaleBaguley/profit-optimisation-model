@@ -43,11 +43,12 @@ def build_profit_max_model():
     P88 = -5.476604474129552  # MPa
     k_max = 0.2  # mmol m-2 s-1 MPa-1
 
-    conductance_model = cumulative_Weibull_distribution_from_conductance_loss_at_given_water_potentials( P50,
+    conductance_model = cumulative_Weibull_distribution_from_conductance_loss_at_given_water_potentials( k_max,
+                                                                                                         P50,
                                                                                                          P88,
                                                                                                          0.5,
-                                                                                                         0.88,
-                                                                                                         k_max)
+                                                                                                         0.88
+                                                                                                         )
 
     # hydraulic cost model
     critical_water_potential = conductance_model.water_potential_from_conductivity_loss_fraction(0.95)  # MPa
