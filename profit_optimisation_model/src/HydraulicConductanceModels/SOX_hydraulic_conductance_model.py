@@ -56,6 +56,20 @@ class SOXHydraulicConductanceModel(HydraulicConductanceModel):
         return self._water_potential_at_half_conductance * power(1/conductance_fraction - 1,
                                                                  1/self._shape_parameter)
 
+    @property
+    def sensitivity_parameter(self):
+        """
+        @return: (MPa)
+        """
+        return self._water_potential_at_half_conductance
+
+    @property
+    def shape_parameter(self):
+        """
+        @return: (Unitless)
+        """
+        return self._shape_parameter
+
 # -- Model creation functions ------------------------------------------------
 
 
@@ -96,10 +110,13 @@ def SOX_conductance_parameters_from_conductance_loss_at_goven_water_potentials(
     conductance_loss_fraction_2,
     ):
 
-    shape_parameter = (log(1/conductance_loss_fraction_1 - 1) - log(1/conductance_loss_fraction_2 - 1)
+    conductance_fraction_1 = 1 - conductance_loss_fraction_1
+    conductance_fraction_2 = 1 - conductance_loss_fraction_2
+
+    shape_parameter = (log(1/conductance_fraction_1 - 1) - log(1/conductance_fraction_2 - 1)
                        / (log(water_potential_1 / water_potential_2)))
 
     water_potential_at_half_conductance = (water_potential_1
-                                           * power(1/conductance_loss_fraction_1 - 1, -1/shape_parameter))
+                                           * power(1/conductance_fraction_1 - 1, -1/shape_parameter))
 
     return maximum_conductance, water_potential_at_half_conductance, shape_parameter
