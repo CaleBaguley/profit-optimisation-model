@@ -39,8 +39,8 @@ from profit_optimisation_model.src.ProfitModels.SoxModel import SOXModel
 def build_profit_max_model():
 
     # conductance model
-    P50 = -4.739999999999999  # MPa
-    P88 = -5.476604474129552  # MPa
+    P50 = -3  # MPa
+    P88 = -4  # MPa
     k_max = 0.2  # mmol m-2 s-1 MPa-1
 
     conductance_model = cumulative_Weibull_distribution_from_conductance_loss_at_given_water_potentials( k_max,
@@ -75,8 +75,8 @@ def build_profit_max_model():
 def build_SOX_model():
 
     # conductance model
-    P50 = -4.739999999999999  # MPa
-    P88 = -5.476604474129552  # MPa
+    P50 = -3  # MPa
+    P88 = -4  # MPa
     k_max = 0.2  # mmol m-2 s-1 MPa-1
     conductance_model = SOX_conductance_model_from_conductance_loss_at_goven_water_potentials(k_max,
                                                                                               P50,
