@@ -34,11 +34,13 @@ class HydraulicConductanceModel:
         self._xylem_recovery_water_potnetial = xylem_recovery_water_potnetial
         self._PLC_damage_threshold = PLC_damage_threshold
 
-    def conductance(self, water_potential):
+    def conductance(self, water_potential, leaf_water_potential, soil_water_potential):
 
         """
 
         @param water_potential: (MPa)
+        @param leaf_water_potential: (MPa)
+        @param soil_water_potential: (MPa)
         @return: conductance (mmol m-2 s-1 MPa-1)
         """
 

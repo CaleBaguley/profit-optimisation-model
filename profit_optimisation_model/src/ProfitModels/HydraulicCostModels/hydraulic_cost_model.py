@@ -51,7 +51,7 @@ class HydraulicCostModel:
 
         raise Exception("hydraulic_cost method not implemented in base class.")
 
-    def hydraulic_conductance(self, water_potential):
+    def hydraulic_conductance(self, water_potential, leaf_water_potential, soil_water_potential):
 
         """
 
@@ -59,9 +59,9 @@ class HydraulicCostModel:
         @return: hydraulic conductance (mmol m-2 s-1 MPa-1)
         """
 
-        return self._hydraulic_conductance_model.conductance(water_potential)
+        return self._hydraulic_conductance_model.conductance(water_potential, leaf_water_potential, soil_water_potential)
 
-    def instantaneous_maximum_hydraulic_conductance(self, soil_water_potential):
+    def instantaneous_maximum_hydraulic_conductance(self, soil_water_potential, leaf_water_potential = None):
 
         """
 
@@ -69,7 +69,7 @@ class HydraulicCostModel:
         @return: instantaneous maximum hydraulic conductance (mmol m-2 s-1 MPa-1)
         """
 
-        return self.hydraulic_conductance(soil_water_potential)
+        return self.hydraulic_conductance(soil_water_potential, leaf_water_potential, soil_water_potential)
 
     def transpiration(self, min_water_potential, max_water_potential, steps = 100):
         """

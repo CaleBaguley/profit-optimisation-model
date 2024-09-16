@@ -38,7 +38,7 @@ class CumulativeWeibullDistribution(HydraulicConductanceModel):
                          xylem_recovery_water_potnetial,
                          PLC_damage_threshold)
 
-    def conductance(self, water_potential):
+    def conductance(self, water_potential, leaf_water_potential, soil_water_potential):
 
         """
 

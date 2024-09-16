@@ -18,10 +18,12 @@ class ProfitMaxHydraulicCostModel(HydraulicCostModel):
         @return: hydraulic cost (unitless)
         """
 
-        hydraulic_conductance = self.hydraulic_conductance(leaf_water_potential)
+        hydraulic_conductance = self.hydraulic_conductance(leaf_water_potential,
+                                                           leaf_water_potential,
+                                                           soil_water_potential)
 
         instantaneous_maximum_hydraulic_conductance = \
-            self.instantaneous_maximum_hydraulic_conductance(soil_water_potential)
+            self.instantaneous_maximum_hydraulic_conductance(soil_water_potential, leaf_water_potential)
 
         return ((instantaneous_maximum_hydraulic_conductance - hydraulic_conductance)
                 / (instantaneous_maximum_hydraulic_conductance - self._critical_hydraulic_conductance))

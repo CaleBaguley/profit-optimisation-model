@@ -35,7 +35,7 @@ class CappedHydraulicConductanceModel(HydraulicConductanceModel):
                          base_conductance_model.xylem_recovery_water_potnetial,
                          base_conductance_model.PLC_damage_threshold)
 
-    def conductance(self, water_potential):
+    def conductance(self, water_potential, leaf_water_potential, soil_water_potential):
 
         """
         @param water_potential: (MPa)

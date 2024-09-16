@@ -59,7 +59,7 @@ class APachalisConductanceModel(HydraulicConductanceModel):
                          base_vulnerability_curve.xylem_recovery_water_potnetial,
                          base_vulnerability_curve.PLC_damage_threshold)
 
-    def conductance(self, water_potential):
+    def conductance(self, water_potential, leaf_water_potential, soil_water_potential):
 
         """
         Calculate the conductance of the xylem given a water potential.
