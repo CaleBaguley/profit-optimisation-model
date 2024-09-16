@@ -164,13 +164,14 @@ class APachalisConductanceModel(HydraulicConductanceModel):
         # Set the new population of the youngest xylem age group
         self._xylem_population[0] = growth_rate * timestep
 
-    def update_xylem_damage(self, water_potential, timestep, transpiration_rate):
+    def update_xylem_damage(self, water_potential, timestep, transpiration_rate, root_water_potential):
 
         """
         Update the xylem conductance and population given a current water potential, timestep and transpiration rate.
         @param water_potential: (MPa)
         @param timestep: (s)
         @param transpiration_rate: (mmol m-2 s-1)
+        @param root_water_potential: (MPa)
         """
 
         # Update the xylem conductance and population

@@ -54,7 +54,7 @@ class JBDynamicXylemConductanceModel(DSMackayXylemDamageModelAnalytic):
                          0.,
                          0.)
 
-    def update_xylem_damage(self, water_potential, timestep, transpiration_rate):
+    def update_xylem_damage(self, water_potential, timestep, transpiration_rate, root_water_potential):
 
         # Calculate the new sapwood area
         self._sapwood_area += (self._growth_rate - self._death_rate) * timestep

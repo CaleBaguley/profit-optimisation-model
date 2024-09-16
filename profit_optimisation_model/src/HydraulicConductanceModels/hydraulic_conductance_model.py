@@ -86,37 +86,40 @@ class HydraulicConductanceModel:
 
         return trapz(conductance_values, water_potential_values)
 
-    def update_xylem_damage(self, water_potential, timestep, transpiration_rate):
+    def update_xylem_damage(self, water_potential, timestep, transpiration_rate, root_water_potential):
         """
         @param water_potential: (MPa)
         @param timestep: (s)
         @param transpiration_rate: (mmol m-2 s-1)
+        @param root_water_potential: (MPa)
         @return: bool indicting if the model has changed
         """
 
         if water_potential >= self._xylem_recovery_water_potnetial:
-            return self._recover_xylem(water_potential, timestep)
+            return self._recover_xylem(water_potential, timestep, root_water_potential)
 
         conductance = self.conductance(water_potential)
 
         if conductance <= self.maximum_conductance * (1 - self._PLC_damage_threshold):
-            return self._damage_xylem(water_potential, timestep, transpiration_rate)
+            return self._damage_xylem(water_potential, timestep, transpiration_rate, root_water_potential)
 
         return False
 
-    def _damage_xylem(self, water_potential, timestep, transpiration_rate):
+    def _damage_xylem(self, water_potential, timestep, transpiration_rate, root_water_potential):
         """
         @param water_potential: (MPa)
         @param timestep: (s)
         @param transpiration_rate: (mmol m-2 s-1)
+        @param root_water_potential: (MPa)
         @return: bool indicting if the model has changed
         """
         return False
 
-    def _recover_xylem(self, water_potential, timestep):
+    def _recover_xylem(self, water_potential, timestep, root_water_potential):
         """
         @param water_potential: (MPa)
         @param timestep: (s)
+        @param root_water_potential: (MPa)
         @return: bool indicting if the model has changed
         """
         return False

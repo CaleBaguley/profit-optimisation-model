@@ -35,7 +35,7 @@ class DSMackayXylemDamageModelAnalyticRecovery(DSMackayXylemDamageModelAnalytic)
                          None,
                          None)
 
-    def update_xylem_damage(self, water_potential, timestep, transpiration_rate):
+    def update_xylem_damage(self, water_potential, timestep, transpiration_rate, root_water_potential):
         """
         @param water_potential: (MPa)
         @param timestep: (s)

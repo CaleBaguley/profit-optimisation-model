@@ -205,7 +205,7 @@ class ProfitOptimisationModel:
                                     photosynthetically_active_radiation,
                                     number_of_sample_points)
 
-        self._hydraulic_cost_model.update_xylem_damage(output[0], step_size, output[2])
+        self._hydraulic_cost_model.update_xylem_damage(output[0], step_size, output[2], soil_water_potential)
 
         return output
 
