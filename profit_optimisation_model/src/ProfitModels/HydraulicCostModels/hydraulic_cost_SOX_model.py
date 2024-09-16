@@ -22,7 +22,9 @@ class SOXHydraulicCostModel(HydraulicCostModel):
         # water potentials.
         mean_conductance = (leaf_water_potential + soil_water_potential)/2
 
-        hydraulic_conductance = self.hydraulic_conductance(mean_conductance)
+        hydraulic_conductance = self.hydraulic_conductance(mean_conductance,
+                                                           leaf_water_potential,
+                                                           soil_water_potential)
 
         return (1 - (hydraulic_conductance - self.critical_hydraulic_conductance)
                  / (self.hydraulic_conductance_model.maximum_conductance - self.critical_hydraulic_conductance))
