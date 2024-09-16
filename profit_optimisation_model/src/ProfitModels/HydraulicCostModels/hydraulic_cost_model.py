@@ -27,7 +27,7 @@ class HydraulicCostModel:
         self._critical_leaf_water_potential = critical_leaf_water_potential
 
         self._critical_hydraulic_conductance = \
-            hydraulic_conductance_model.conductance(critical_leaf_water_potential)
+            hydraulic_conductance_model.conductance(critical_leaf_water_potential, 0.0, 0.0)
 
     # ----- Hydraulic cost ------
     def hydraulic_cost_as_a_function_of_leaf_water_potential(self, leaf_water_potentials, soil_water_potential):
@@ -59,7 +59,8 @@ class HydraulicCostModel:
         @return: hydraulic conductance (mmol m-2 s-1 MPa-1)
         """
 
-        return self._hydraulic_conductance_model.conductance(water_potential, leaf_water_potential, soil_water_potential)
+        return self._hydraulic_conductance_model.conductance(water_potential, leaf_water_potential,
+                                                             soil_water_potential)
 
     def instantaneous_maximum_hydraulic_conductance(self, soil_water_potential, leaf_water_potential = None):
 

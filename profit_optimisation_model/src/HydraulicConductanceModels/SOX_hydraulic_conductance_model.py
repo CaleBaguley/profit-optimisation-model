@@ -32,7 +32,7 @@ class SOXHydraulicConductanceModel(HydraulicConductanceModel):
         self._water_potential_at_half_conductance = water_potential_at_half_conductance
         self._shape_parameter = shape_parameter
 
-    def conductance(self, water_potential, leaf_water_potential, soil_water_potential):
+    def conductance(self, water_potential, leaf_water_potential=None, soil_water_potential=None):
         """
 
         @param water_potential: (MPa)

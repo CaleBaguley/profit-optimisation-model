@@ -34,7 +34,7 @@ class HydraulicConductanceModel:
         self._xylem_recovery_water_potnetial = xylem_recovery_water_potnetial
         self._PLC_damage_threshold = PLC_damage_threshold
 
-    def conductance(self, water_potential, leaf_water_potential, soil_water_potential):
+    def conductance(self, water_potential, leaf_water_potential = None, soil_water_potential = None):
 
         """
 
@@ -51,7 +51,7 @@ class HydraulicConductanceModel:
         @param water_potential: (MPa)
         @return: (unitless)
         """
-        return 100*(1 - self.conductance(water_potential)/self.healthy_maximum_conductance)
+        return 100*(1 - self.conductance(water_potential) / self.healthy_maximum_conductance)
 
     def water_potential_from_conductivity_loss_fraction(self, conductivity_loss_fraction):
         """
@@ -103,16 +103,16 @@ class HydraulicConductanceModel:
         conductance = self.conductance(water_potential)
 
         if conductance <= self.maximum_conductance * (1 - self._PLC_damage_threshold):
-            return self._damage_xylem(water_potential, timestep, transpiration_rate, root_water_potential)
+            return self._damage_xylem(water_potential, timestep, transpiration_rate, 0.0)
 
         return False
 
     def _damage_xylem(self, water_potential, timestep, transpiration_rate, root_water_potential):
         """
+        @param root_water_potential:
         @param water_potential: (MPa)
         @param timestep: (s)
         @param transpiration_rate: (mmol m-2 s-1)
-        @param root_water_potential: (MPa)
         @return: bool indicting if the model has changed
         """
         return False

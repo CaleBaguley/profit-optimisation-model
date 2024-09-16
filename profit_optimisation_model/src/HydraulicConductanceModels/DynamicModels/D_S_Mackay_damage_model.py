@@ -43,9 +43,10 @@ class DSMackayXylemDamageModel(CumulativeWeibullDistribution):
                          xylem_recovery_water_potnetial,
                          PLC_damage_threshold)
 
-    def _damage_xylem(self, water_potential, timestep, transpiration_rate):
+    def _damage_xylem(self, water_potential, timestep, transpiration_rate, root_water_potential):
 
         """
+        @param root_water_potential:
         @param water_potential: (MPa)
         @param timestep: (s)
         @param transpiration_rate: (mmol m-2 s-1)
