@@ -3,10 +3,11 @@
 
 -----------------------------------------------------------------------------------------
 """
-from jupyter_server.transutils import trans
 
 from profit_optimisation_model.src.HydraulicConductanceModels.hydraulic_conductance_model import (
     HydraulicConductanceModel)
+
+from numpy import minimum
 
 class WholeTrunkImapirmentModel(HydraulicConductanceModel):
 
@@ -35,11 +36,9 @@ class WholeTrunkImapirmentModel(HydraulicConductanceModel):
         elif(soil_water_potential is None):
             raise ValueError("Soil water potential must be provided for the whole trunk impairment model")
 
-        tmp_psi_leaf_extreme = min(self._psi_leaf_extreme, leaf_water_potential)
-        tmp_psi_root_extreme = min(self._psi_root_extreme, soil_water_potential)
+        tmp_psi_leaf_extreme = minimum(self._psi_leaf_extreme, leaf_water_potential)
+        tmp_psi_root_extreme = minimum(self._psi_root_extreme, soil_water_potential)
 
-        print("tmp_psi_leaf_extreme: ", tmp_psi_leaf_extreme)
-        print("tmp_psi_root_extreme: ", tmp_psi_root_extreme)
 
         #            (Psi - Psi_soil)
         # Psi' = ----------------------- * (Psi_leaf_extreme - Psi_root_extreme) + Psi_root_extreme
@@ -76,6 +75,8 @@ class WholeTrunkImapirmentModel(HydraulicConductanceModel):
 
         # Scale the transpiration to the current water potential limits
         transpiration *= (max_water_potential - min_water_potential) / (tmp_psi_root_extreme - tmp_psi_leaf_extreme)
+
+        return transpiration
 
     def _damage_xylem(self, water_potential, timestep, transpiration_rate, root_water_potential):
         """
