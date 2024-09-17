@@ -43,6 +43,8 @@ class CumulativeWeibullDistribution(HydraulicConductanceModel):
         """
 
         @param water_potential: (MPa)
+        @param leaf_water_potential: (MPa)
+        @param soil_water_potential: (MPa)
         @return: conductance (mmol m-2 s-1 MPa-1)
         """
 
