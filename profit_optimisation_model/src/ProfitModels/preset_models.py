@@ -12,6 +12,9 @@ from profit_optimisation_model.src.HydraulicConductanceModels.cumulative_Weibull
     cumulative_Weibull_distribution_from_conductance_loss_at_given_water_potentials)
 from profit_optimisation_model.src.HydraulicConductanceModels.SOX_hydraulic_conductance_model import (
     SOX_conductance_model_from_conductance_loss_at_goven_water_potentials)
+from profit_optimisation_model.src.HydraulicConductanceModels.hydraulic_conductance_model import \
+    HydraulicConductanceModel
+from profit_optimisation_model.src.ProfitModels.HydraulicCostModels.hydraulic_cost_model import HydraulicCostModel
 
 # Hydraulic cost models
 from profit_optimisation_model.src.ProfitModels.HydraulicCostModels.hydraulic_cost_profit_max_model import (
@@ -35,72 +38,109 @@ from profit_optimisation_model.src.ProfitModels.SoxModel import SOXModel
 
 # -- Define the preset models -------------------------------------------
 
+def build_profit_max_model(conductance_model: HydraulicConductanceModel = None,
+                           hydraulic_cost_model: HydraulicCostModel = None,
+                           leaf_air_coupling_model: LeafAirCouplingModel = None,
+                           photosynthesis_model: PhotosynthesisModel = None,
+                           CO2_gain_model = None):
 
-def build_profit_max_model():
+    '''
+    Builds profit max model
+    @param: conductance_model = None
+    @param: hydraulic_cost_model = None
+    @param: leaf_air_coupling_model = None
+    @param: photosynthesis_model = None
+    @param: CO2_gain_model = None
+    @return: profit_optimisation_model
+    '''
 
-    # conductance model
-    P50 = -3  # MPa
-    P88 = -4  # MPa
-    k_max = 0.2  # mmol m-2 s-1 MPa-1
+    if(conductance_model is None):
+        # conductance model
+        P50 = -3  # MPa
+        P88 = -4  # MPa
+        k_max = 0.2  # mmol m-2 s-1 MPa-1
 
-    conductance_model = cumulative_Weibull_distribution_from_conductance_loss_at_given_water_potentials( k_max,
-                                                                                                         P50,
-                                                                                                         P88,
-                                                                                                         0.5,
-                                                                                                         0.88
-                                                                                                         )
+        conductance_model = cumulative_Weibull_distribution_from_conductance_loss_at_given_water_potentials(k_max,
+                                                                                                            P50,
+                                                                                                            P88,
+                                                                                                            0.5,
+                                                                                                            0.88
+                                                                                                            )
 
     # hydraulic cost model
-    critical_water_potential = conductance_model.water_potential_from_conductivity_loss_fraction(0.95)  # MPa
-    hydraulic_cost_model = ProfitMaxHydraulicCostModel(conductance_model,
-                                                       critical_water_potential)
+    if(hydraulic_cost_model is None):
+        critical_water_potential = conductance_model.water_potential_from_conductivity_loss_fraction(0.95)  # MPa
+        hydraulic_cost_model = ProfitMaxHydraulicCostModel(conductance_model,
+                                                           critical_water_potential)
 
     # leaf to air conductance model
-    leaf_air_coupling_model = LeafAirCouplingModel()
+    if(leaf_air_coupling_model is None):
+        leaf_air_coupling_model = LeafAirCouplingModel()
 
     # photosynthesis model
-    electron_transport_limited = PhotosynthesisModelElectronTransportLimitedLeuning()
-    rubisco_limited = PhotosynthesisModelRubiscoLimitedLeuning()
-    photosynthesis_model = PhotosynthesisModel(electron_transport_limited, rubisco_limited)
+    if(photosynthesis_model is None):
+        electron_transport_limited = PhotosynthesisModelElectronTransportLimitedLeuning()
+        rubisco_limited = PhotosynthesisModelRubiscoLimitedLeuning()
+        photosynthesis_model = PhotosynthesisModel(electron_transport_limited, rubisco_limited)
 
     # CO2 gain model
-    CO2_gain_model = ProfitMaxCO2GainModel(leaf_air_coupling_model,
-                                           photosynthesis_model)
+    if(CO2_gain_model is None):
+        CO2_gain_model = ProfitMaxCO2GainModel(leaf_air_coupling_model,
+                                               photosynthesis_model)
 
     profit_optimisation_model = ProfitMaxModel(hydraulic_cost_model, leaf_air_coupling_model, CO2_gain_model)
 
     return profit_optimisation_model
 
 
-def build_SOX_model():
+def build_SOX_model(conductance_model: HydraulicConductanceModel = None,
+                    hydraulic_cost_model: HydraulicCostModel = None,
+                    leaf_air_coupling_model: LeafAirCouplingModel = None,
+                    photosynthesis_model: PhotosynthesisModel = None,
+                    CO2_gain_model = None):
+
+    '''
+    Builds SOX model
+    @param: conductance_model = None
+    @param: hydraulic_cost_model = None
+    @param: leaf_air_coupling_model = None
+    @param: photosynthesis_model = None
+    @param: CO2_gain_model = None
+    @return: profit_optimisation_model
+    '''
 
     # conductance model
-    P50 = -3  # MPa
-    P88 = -4  # MPa
-    k_max = 0.2  # mmol m-2 s-1 MPa-1
-    conductance_model = SOX_conductance_model_from_conductance_loss_at_goven_water_potentials(k_max,
-                                                                                              P50,
-                                                                                              P88,
-                                                                                              0.5,
-                                                                                              0.88,
-                                                                                              )
+    if(conductance_model is None):
+        P50 = -3  # MPa
+        P88 = -4  # MPa
+        k_max = 0.2  # mmol m-2 s-1 MPa-1
+        conductance_model = SOX_conductance_model_from_conductance_loss_at_goven_water_potentials(k_max,
+                                                                                                  P50,
+                                                                                                  P88,
+                                                                                                 0.5,
+                                                                                                 0.88,
+                                                                                                  )
 
     # hydraulic cost model
-    critical_water_potential = conductance_model.water_potential_from_conductivity_loss_fraction(0.95)  # MPa
-    hydraulic_cost_model = SOXHydraulicCostModel(conductance_model,
-                                                 critical_water_potential)
+    if(hydraulic_cost_model is None):
+        critical_water_potential = conductance_model.water_potential_from_conductivity_loss_fraction(0.95)  # MPa
+        hydraulic_cost_model = SOXHydraulicCostModel(conductance_model,
+                                                     critical_water_potential)
 
     # leaf to air conductance model
-    leaf_air_coupling_model = LeafAirCouplingModel()
+    if(leaf_air_coupling_model is None):
+        leaf_air_coupling_model = LeafAirCouplingModel()
 
     # photosynthesis model
-    electron_transport_limited = PhotosynthesisModelElectronTransportLimitedLeuning()
-    rubisco_limited = PhotosynthesisModelRubiscoLimitedLeuning()
-    photosynthesis_model = PhotosynthesisModel(electron_transport_limited, rubisco_limited)
+    if(photosynthesis_model is None):
+        electron_transport_limited = PhotosynthesisModelElectronTransportLimitedLeuning()
+        rubisco_limited = PhotosynthesisModelRubiscoLimitedLeuning()
+        photosynthesis_model = PhotosynthesisModel(electron_transport_limited, rubisco_limited)
 
     # CO2 gain model
-    CO2_gain_model = SOXCO2GainModel(leaf_air_coupling_model,
-                                     photosynthesis_model)
+    if(CO2_gain_model is None):
+        CO2_gain_model = SOXCO2GainModel(leaf_air_coupling_model,
+                                         photosynthesis_model)
 
     profit_optimisation_model = SOXModel(hydraulic_cost_model, leaf_air_coupling_model, CO2_gain_model)
 
