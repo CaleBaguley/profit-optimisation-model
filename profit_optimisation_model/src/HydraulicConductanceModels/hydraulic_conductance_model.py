@@ -100,10 +100,10 @@ class HydraulicConductanceModel:
         if water_potential >= self._xylem_recovery_water_potnetial:
             return self._recover_xylem(water_potential, timestep, root_water_potential)
 
-        conductance = self.conductance(water_potential)
+        conductance = self.conductance(water_potential, water_potential, root_water_potential)
 
         if conductance <= self.maximum_conductance * (1 - self._PLC_damage_threshold):
-            return self._damage_xylem(water_potential, timestep, transpiration_rate, 0.0)
+            return self._damage_xylem(water_potential, timestep, transpiration_rate, root_water_potential)
 
         return False
 
