@@ -61,20 +61,16 @@ class DSMackayXylemDamageModelAnalytic(DSMackayXylemDamageModel):
         # find the new sensitivity parameter. This is the water potential at which the
         # conductance of the healthy model is equal to the new k_max value times e to
         # the minus one.
-        k_at_new_b = new_k_max * exp(-1)
         b_new = (self._base_sensitivity_parameter
-                 * power(- log(k_at_new_b / self._base_maximum_conductance),
+                 * power(1 - log(new_k_max / self._base_maximum_conductance),
                          1 / self._base_shape_parameter))
 
         # Calculate the shape parameter c. This is done by forcing the new model to have
         # the same gradient as the previous one when the water potential is equal to the
         # new_b value.
-        exponent = 1 - power(b_new / self._base_sensitivity_parameter, self._base_shape_parameter)
 
         new_c = (self._base_shape_parameter
-                 * power(b_new / self._base_sensitivity_parameter, self._base_shape_parameter)
-                 * (self._base_maximum_conductance / new_k_max)
-                 * exp(exponent))
+                 * power(b_new / self._base_sensitivity_parameter, self._base_shape_parameter))
 
         self._k_max = new_k_max
         self._sensitivity_parameter = b_new
