@@ -18,11 +18,10 @@ class SOXHydraulicCostModel(HydraulicCostModel):
         @return: hydraulic cost (unitless)
         """
 
-        # SOX uses the conductance calculated for the mean of the leaf and root zone
-        # water potentials.
-        mean_conductance = (leaf_water_potential + soil_water_potential)/2
+        # Note: original SOX used the mean of the leaf and root water potentials, here we use the leaf only.
+        #       This matches the implementation in Sabot et al. 2022 and now JULES.
 
-        hydraulic_conductance = self.hydraulic_conductance(mean_conductance,
+        hydraulic_conductance = self.hydraulic_conductance(leaf_water_potential,
                                                            leaf_water_potential,
                                                            soil_water_potential)
 
