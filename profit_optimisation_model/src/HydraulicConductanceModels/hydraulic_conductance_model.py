@@ -37,7 +37,7 @@ class HydraulicConductanceModel:
     def conductance(self, water_potential, leaf_water_potential = None, soil_water_potential = None):
 
         """
-
+        Returns the conductance at a given water potential
         @param water_potential: (MPa)
         @param leaf_water_potential: (MPa)
         @param soil_water_potential: (MPa)
@@ -48,14 +48,15 @@ class HydraulicConductanceModel:
 
     def PLC(self, water_potential):
         """
+        Calcualte the percentage loss of conductivity for a given water potnetial
         @param water_potential: (MPa)
-        @return: (unitless)
+        @return: (%)
         """
         return 100*(1 - self.conductance(water_potential) / self.healthy_maximum_conductance)
 
     def water_potential_from_conductivity_loss_fraction(self, conductivity_loss_fraction):
         """
-
+        Calculate the water potential associated with a given loss of conductivity
         @param conductivity_loss_fraction: (unitless)
         @return: (MPa)
         """
@@ -64,7 +65,7 @@ class HydraulicConductanceModel:
 
     def water_potential_from_conductance(self, conductance):
         """
-
+        Calcualte the water potential associated with a given conductance.
         @param conductance: (mmol m-2 s-1 MPa-1)
         @return: (MPa)
         """
@@ -87,6 +88,32 @@ class HydraulicConductanceModel:
         conductance_values = self.conductance(water_potential_values)
 
         return trapz(conductance_values, water_potential_values)
+
+    def water_potnetial_from_transpiration(self, transpiration_rate, initial_water_potential, step_size = 0.1, max_steps = 1000):
+        """
+        Estimates the water potential needed to achieve a given transpiration rate.
+        @param transpiration_rate:
+        @param initial_water_potential: Water potential to start from.
+        @param step_size: 0.1 (MPa), Step size when searching for water potential
+        @param max_steps: 1000, Limits the number of steps if transpiration is not achievable.
+        @return: water potential (MPa)
+        """
+
+        current_transpiration = 0
+        current_water_potential = initial_water_potential
+        for i in range(max_steps):
+            current_conductance = self.conductance(current_water_potential)
+            next_conductance = self.conductance(current_water_potential + step_size)
+
+            current_transpiration += step_size*(current_conductance + next_conductance)/2
+
+            if(transpiration_rate < current_transpiration):
+                return current_water_potential
+
+            current_water_potential += step_size
+
+        print(f"ERROR: transpiration of {transpiration_rate} not achievable in {max_steps}.")
+        return initial_water_potential
 
     def update_xylem_damage(self, water_potential, timestep, transpiration_rate, root_water_potential):
         """
